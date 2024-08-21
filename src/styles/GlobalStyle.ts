@@ -12,26 +12,34 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 16px;
     line-height: 23px;
     color: var(--text-primary);
+    background:var(--bg-main);
   }
 
   a {
-    text-decoration: none;
-    color: inherit;
+    color: var(--link-color);
   }
+
 
   button {
     cursor: pointer;
+    outline: none;
+    border:none;
+    background:transparent;
+
+
   }
 
   :root {
+    --bg-main: #f7f8fd;
+    --bg-secondary: #f2f4ff;
     --primary-color: #fff;
     --text-primary: #3a4374;
     --text-secondary: #647196;
     --button-color: #ad1fea;
     --link-color:#4661e6; 
+    --hover-color: #cfd7ff;
     
-    --mobile:768px;
-    --tablet:1024px;
+   
 
     --h1-size:24px;
     --h1-line:35px;
@@ -57,6 +65,11 @@ export const GlobalStyle = createGlobalStyle`
 
     --body3-size:13px;
     --body3-line:19px;
+
+    --border-radius:10px;
+
+    --transition:all .3s ease;
+
 
   }
     `;
