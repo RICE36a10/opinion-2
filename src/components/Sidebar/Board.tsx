@@ -2,8 +2,7 @@ import styled from "styled-components";
 import bgHeader from "@/assets/suggestions/desktop/background-header.png";
 import burger from "@/assets/shared/mobile/icon-hamburger.svg";
 import close from "@/assets/shared/mobile/icon-close.svg";
-import React from "react";
-import { useState } from "react";
+import React, { forwardRef } from "react";
 export const BoardCard = styled.div`
   background: url(${bgHeader});
   background-size: cover;
@@ -34,11 +33,13 @@ export const BoardCard = styled.div`
       line-height: var(--h2-line);
     }
   }
-  @media (max-width: 768px) {
+  @media (max-width: 767.98px) {
     border-radius: unset;
     padding: 16px 24px;
-    position: relative;
+    position: sticky;
+    top: 0;
     width: 100%;
+    z-index: 99999;
     h1 {
       font-size: 15px;
       letter-spacing: -0.19px;
@@ -60,28 +61,30 @@ export const NavButton = styled.button`
   }
 `;
 interface BoardProps {
-  onToggle: (isOpen: boolean) => void;
+  isOpen?: boolean;
+  setIsOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const Board: React.FC<BoardProps> = ({ onToggle }) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const handleClick = () => {
-    const val = !isOpen;
-    setIsOpen(val);
-    console.log(onToggle);
-  };
-  return (
-    <BoardCard>
-      <h1>Frontend Mentor</h1>
-      <p>Feedback Board</p>
-      <NavButton onClick={handleClick}>
-        {isOpen ? (
-          <img src={close} alt="close" />
-        ) : (
-          <img src={burger} alt="hamburger" />
-        )}
-      </NavButton>
-    </BoardCard>
-  );
-};
+const Board = forwardRef<HTMLDivElement, BoardProps>(
+  ({ isOpen, setIsOpen }, ref) => {
+    const handleToggle = () => {
+      if (isOpen !== undefined && setIsOpen) {
+        setIsOpen((prev) => !prev);
+      }
+    };
+    return (
+      <BoardCard ref={ref}>
+        <h1>Frontend Mentor</h1>
+        <p>Feedback Board</p>
+        <NavButton onClick={handleToggle}>
+          {isOpen ? (
+            <img src={close} alt="close" />
+          ) : (
+            <img src={burger} alt="hamburger" />
+          )}
+        </NavButton>
+      </BoardCard>
+    );
+  }
+);
 
 export default Board;
