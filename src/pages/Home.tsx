@@ -3,24 +3,9 @@ import styled from "styled-components";
 import FeedbackContainer from "@/components/FeedbackContainer";
 import Board from "@/components/Sidebar/Board";
 import { useState, useEffect, useRef, useCallback } from "react";
-import Overlay from "@/components/Overlay";
+import Overlay from "@/components/UI/Overlay";
+import Header from "@/components/Header";
 
-const Container = styled.div`
-  max-width: 1110px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 50px 40px 0;
-  display: flex;
-  gap: 30px;
-  @media (max-width: 1024px) {
-    flex-direction: column;
-    gap: 40px;
-  }
-  @media (max-width: 767.98px) {
-    padding: 0;
-    gap: 0;
-  }
-`;
 const Home = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -74,10 +59,33 @@ const Home = () => {
         <Board isOpen={isOpen} setIsOpen={setIsOpen} ref={headerRef} />
       )}
       <Sidebar ref={sidebarRef} isMobile={isMobile} isOpen={isOpen} />
-      <FeedbackContainer />
+      <ContentWrapper>
+        <Header isMobile={isMobile} />
+        <FeedbackContainer />
+      </ContentWrapper>
       {isOpen && <Overlay />}
     </Container>
   );
 };
+
+const Container = styled.div`
+  max-width: 1158px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 50px 24px 0;
+  display: flex;
+  gap: 30px;
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    gap: 40px;
+  }
+  @media (max-width: 767.98px) {
+    padding: 0;
+    gap: 0;
+  }
+`;
+const ContentWrapper = styled.div`
+  flex: 1;
+`;
 
 export default Home;

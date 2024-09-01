@@ -2,7 +2,11 @@ import Board from "./Board";
 import CategoryFilter from "./CategoryFilter";
 import Roadmap from "./Roadmap";
 import styled from "styled-components";
-import React, { forwardRef } from "react";
+import { forwardRef } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import LogIn from "../LogIn";
+import LogOut from "../LogOut";
 const SidebarWrapper = styled.aside<WrapperProps>`
   width: 255px;
   display: flex;
@@ -37,12 +41,16 @@ interface WrapperProps {
 }
 const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
   ({ isMobile, isOpen }, ref) => {
-    console.log(isMobile);
+    const { user } = useSelector((state: RootState) => {
+      return state.User;
+    });
     return (
       <SidebarWrapper ref={ref} isOpen={isOpen}>
+        {isMobile && !user && <LogIn isMenu />}
         {!isMobile && <Board />}
         <CategoryFilter />
         <Roadmap />
+        {isMobile && user && <LogOut />}
       </SidebarWrapper>
     );
   }

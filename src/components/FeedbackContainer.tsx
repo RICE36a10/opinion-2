@@ -1,16 +1,14 @@
 import React from "react";
-import Header from "./Header";
 import styled from "styled-components";
-
-const Container = styled.div`
-  flex: 1;
-`;
+import Feedback from "./Feedback";
 const FeedbackContainer = () => {
   return (
-    <Container>
-      <Header />
-    </Container>
+    <FeedbackWrapper>
+      <Feedback />
+    </FeedbackWrapper>
   );
 };
-
+const FeedbackWrapper = styled.section`
+  padding: 20px 0;
+`;
 export default FeedbackContainer;

@@ -5,10 +5,11 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: "Jost", sans-serif;
+
   }
 
   body {
-    font-family: "Jost", sans-serif;
     font-size: 16px;
     line-height: 23px;
     color: var(--text-primary);
@@ -69,6 +70,9 @@ export const GlobalStyle = createGlobalStyle`
     --border-radius:10px;
 
     --transition:all .3s ease;
+
+    --box-shadow: 0px 10px 40px -7px rgba(55, 63, 104, 0.35);
+;
 
 
   }
