@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-
+// export type Execute<A extends unknown[]> = (...args: A) => Promise<void>;
 interface UseAsyncOptions<T> {
   immediate?: boolean;
   onError?: (err: unknown) => void;

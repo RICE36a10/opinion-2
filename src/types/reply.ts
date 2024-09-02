@@ -1,7 +1,7 @@
 import { User } from "./user";
 
 export interface Reply {
-  id?: number;
+  id?: string;
   content: string;
   replyingTo: string;
   user: User;

@@ -1,7 +1,7 @@
 import { Comment } from "./comment";
 
 export interface ProductRequest {
-  id: number;
+  id: string;
   title: string;
   category: string;
   upvotes: number;

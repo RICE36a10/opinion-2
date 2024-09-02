@@ -1,12 +1,27 @@
 import styled from "styled-components";
 import React, { useState } from "react";
-const UpvoteButton: React.FC<{ vote: number }> = ({ vote }) => {
-  const [isUpvoted, setIsUpvoted] = useState(false);
+import { updateProductUpvote } from "@/api/services/feedback";
+import useAsync from "@/utils/hooks/useAsync";
+const UpvoteButton: React.FC<{ vote: number; productId: string }> = ({
+  vote,
+  productId,
+}) => {
+  const [upvote, setUpvote] = useState(false);
+  const [hasUserUpvote, setHasUserUpvote] = useState(false);
+  const { execute: executeUpdateProductUpvote } = useAsync(
+    updateProductUpvote,
+    {}
+  );
+
   const toggleClick = () => {
-    setIsUpvoted(!isUpvoted);
+    // const updatedUpvote = !upvote;
+    setUpvote((prev) => !prev);
+    executeUpdateProductUpvote(productId, upvote, hasUserUpvote);
+    setHasUserUpvote(true);
   };
+
   return (
-    <Button title="Vote" onClick={toggleClick} Upvote={isUpvoted}>
+    <Button title="Vote" onClick={toggleClick} Upvote={upvote}>
       <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
         <path
           d="M1 6l4-4 4 4"

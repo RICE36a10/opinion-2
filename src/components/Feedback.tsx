@@ -4,13 +4,12 @@ import UpvoteButton from "./UI/UpvoteButton";
 import CommentIcon from "@/assets/shared/icon-comments.svg";
 import { ProductRequest } from "@/types/productRequest";
 const Feedback: React.FC<{ feedback: ProductRequest }> = ({ feedback }) => {
-  const { title, description, category, comments, upvotes } = feedback;
+  const { title, description, category, comments, upvotes, id } = feedback;
   const isComments = comments?.length;
-
   return (
     <FeedbackWrapper>
       <ContentWrapper>
-        <UpvoteButton vote={upvotes} />
+        <UpvoteButton vote={upvotes} productId={String(id)} />
         <Content>
           <h3>{title}</h3>
           <p>{description}</p>
