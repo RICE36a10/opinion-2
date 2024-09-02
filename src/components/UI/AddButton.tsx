@@ -15,6 +15,8 @@ const Button = styled.button`
   @media (max-width: 767.98px) {
     min-height: 40px;
     width: 134px;
+    font-size: var(--body3-size);
+    line-height: var(--body3-line);
   }
 `;
 const AddButton = () => {

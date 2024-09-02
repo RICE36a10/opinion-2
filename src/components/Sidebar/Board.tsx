@@ -26,7 +26,6 @@ export const BoardCard = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    flex: 1;
     h1 {
       font-size: var(--h2-size);
       letter-spacing: var(--h2-spacing);

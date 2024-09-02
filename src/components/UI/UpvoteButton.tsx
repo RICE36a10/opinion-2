@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { useState } from "react";
-const UpvoteButton = () => {
+import React, { useState } from "react";
+const UpvoteButton: React.FC<{ vote: number }> = ({ vote }) => {
   const [isUpvoted, setIsUpvoted] = useState(false);
   const toggleClick = () => {
     setIsUpvoted(!isUpvoted);
@@ -16,7 +16,7 @@ const UpvoteButton = () => {
           fill-rule="evenodd"
         />
       </svg>
-      112
+      {vote}
     </Button>
   );
 };
@@ -25,6 +25,7 @@ const Button = styled.button<{ Upvote: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   border-radius: var(--border-radius);
   padding: 8px;
@@ -37,6 +38,12 @@ const Button = styled.button<{ Upvote: boolean }>`
   line-height: var(--body3-line);
   letter-spacing: -0.18px;
   transition: var(--transition);
+  @media (max-width: 767.98px) {
+    flex-direction: row;
+    height: 32px;
+    min-width: 70px;
+    gap: 10px;
+  }
   svg path {
     stroke: ${({ Upvote }) =>
       Upvote ? `var(--primary-color)` : `var(--link-color)`};

@@ -62,7 +62,7 @@ const useAsync = <T>(
     if (immediate) {
       execute();
     }
-  }, [execute, immediate]);
+  }, [immediate]);
 
   return { execute, data, loading, error };
 };

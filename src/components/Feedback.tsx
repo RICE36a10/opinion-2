@@ -2,21 +2,27 @@ import React from "react";
 import styled from "styled-components";
 import UpvoteButton from "./UI/UpvoteButton";
 import CommentIcon from "@/assets/shared/icon-comments.svg";
-const Feedback = () => {
+import { ProductRequest } from "@/types/productRequest";
+const Feedback: React.FC<{ feedback: ProductRequest }> = ({ feedback }) => {
+  const { title, description, category, comments, upvotes } = feedback;
+  const isComments = comments?.length;
+
   return (
     <FeedbackWrapper>
-      <UpvoteButton />
-      <Content>
-        <h3>Add a dark theme option</h3>
-        <p>
-          It would help people with light sensitivities and who prefer dark
-          mode.
-        </p>
-        <span>Feature</span>
-      </Content>
+      <ContentWrapper>
+        <UpvoteButton vote={upvotes} />
+        <Content>
+          <h3>{title}</h3>
+          <p>{description}</p>
+          <span>{category}</span>
+        </Content>
+      </ContentWrapper>
+
       <Comment>
         <img src={CommentIcon} alt="comment" />
-        <span>99</span>
+        <span className={!isComments ? "opacity" : ""}>
+          {isComments ? comments.length : 0}
+        </span>
       </Comment>
     </FeedbackWrapper>
   );
@@ -28,8 +34,20 @@ const FeedbackWrapper = styled.div`
   padding: 28px 32px;
   border-radius: var(--border-radius);
   background: var(--primary-color);
+  cursor: pointer;
+  @media (max-width: 767.98px) {
+    gap: unset;
+    position: relative;
+    padding: 24px;
+  }
+  &:hover h3 {
+    color: var(--link-color);
+  }
   &:not(:last-of-type) {
     margin-bottom: 20px;
+    @media (max-width: 1024px) {
+      margin-bottom: 16px;
+    }
   }
 `;
 const Content = styled.div`
@@ -39,6 +57,13 @@ const Content = styled.div`
     line-height: var(--h3-line);
     letter-spacing: var(h3-spacing);
     margin-bottom: 4px;
+    transition: var(--transition);
+    @media (max-width: 767.98px) {
+      font-size: var(--body3-size);
+      line-height: var(--body3-line);
+      letter-spacing: -0.18px;
+      margin-bottom: 8px;
+    }
   }
   p {
     font-size: var(--body1-size);
@@ -46,6 +71,11 @@ const Content = styled.div`
     color: var(--text-secondary);
     font-weight: 400;
     margin-bottom: 12px;
+    @media (max-width: 767.98px) {
+      font-size: var(--body3-size);
+      line-height: var(--body3-line);
+      margin-bottom: 8px;
+    }
   }
   span {
     background: var(--bg-secondary);
@@ -63,5 +93,30 @@ const Comment = styled.div`
   align-items: center;
   gap: 8px;
   margin-left: auto;
+  font-weight: bold;
+  font-size: var(--body1-size);
+  line-height: var(--body1-line);
+  letter-spacing: -0.22px;
+  color: var(--text-primary);
+  .opacity {
+    opacity: 0.5;
+  }
+  @media (max-width: 767.98px) {
+    position: absolute;
+    right: 24px;
+    bottom: 32px;
+    font-size: var(--body3-size);
+    line-height: var(--body3-line);
+    letter-spacing: -0.18px;
+  }
+`;
+const ContentWrapper = styled.div`
+  display: flex;
+  gap: 40px;
+  align-items: baseline;
+  @media (max-width: 767.98px) {
+    flex-direction: column-reverse;
+    gap: 16px;
+  }
 `;
 export default Feedback;

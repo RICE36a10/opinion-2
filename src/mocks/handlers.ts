@@ -403,6 +403,21 @@ export const handlers = [
       return HttpResponse.json(updatedRequest);
     }
   ),
+  http.patch(`${BASE_URL}/product-requests/:id/upvote`, async ({ params }) => {
+    const { id } = params;
+    const productRequest = allRequests.get(id as string);
+
+    if (!productRequest) {
+      return new HttpResponse(null, { status: 404 });
+    }
+
+    productRequest.upvotes += 1;
+
+    allRequests.set(id as string, productRequest);
+
+    return HttpResponse.json(productRequest);
+  }),
+
   http.get(`${BASE_URL}/product-requests/:id`, ({ params }) => {
     const { id } = params;
     const getRequest = allRequests.get(id as string);
