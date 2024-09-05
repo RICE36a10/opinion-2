@@ -1,10 +1,18 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { useGoogleLogin, TokenResponse } from "@react-oauth/google";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "@/redux/store";
-import { getUser } from "@/redux/actions/user";
+// import { useGoogleLogin, TokenResponse } from "@react-oauth/google";
+// import { useDispatch, useSelector } from "react-redux";
+// import { RootState, AppDispatch } from "@/redux/store";
+// import { getUser } from "@/redux/actions/user";
 import { LogButton } from "@/styles/LogButton";
+
+import { auth, googleProvider } from "@/config/firebase";
+import {
+  signInWithPopup,
+  setPersistence,
+  browserSessionPersistence,
+} from "firebase/auth";
+
 const LogInBtn = styled(LogButton)<{ isMenu: boolean | undefined }>`
   ${({ isMenu }) =>
     isMenu &&
@@ -17,27 +25,15 @@ interface loginProps {
 }
 
 const LogIn: React.FC<loginProps> = ({ isMenu }) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { user } = useSelector((state: RootState) => {
-    return state.User;
-  });
-  const login = useGoogleLogin({
-    onSuccess: (codeResponse: TokenResponse) => {
-      if (codeResponse.access_token) {
-        localStorage.setItem("accessToken", codeResponse.access_token);
-        dispatch(getUser());
-      }
-    },
-    onError: (error) => {
-      console.log("Error: ", error);
-    },
-  });
-
-  useEffect(() => {
-    if (user?.id) {
-      dispatch(getUser());
+  const login = async () => {
+    try {
+      await setPersistence(auth, browserSessionPersistence);
+      await signInWithPopup(auth, googleProvider);
+      console.log(auth);
+    } catch (err) {
+      console.error(err);
     }
-  }, [user?.id]);
+  };
 
   return (
     <LogInBtn

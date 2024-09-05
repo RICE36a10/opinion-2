@@ -7,17 +7,16 @@ const UpvoteButton: React.FC<{ vote: number; productId: string }> = ({
   productId,
 }) => {
   const [upvote, setUpvote] = useState(false);
-  const [hasUserUpvote, setHasUserUpvote] = useState(false);
-  const { execute: executeUpdateProductUpvote } = useAsync(
-    updateProductUpvote,
-    {}
-  );
+  // const [hasUserUpvote, setHasUserUpvote] = useState(false);
+  // const { execute: executeUpdateProductUpvote } = useAsync(
+  //   updateProductUpvote,
+  //   {}
+  // );
 
   const toggleClick = () => {
-    // const updatedUpvote = !upvote;
     setUpvote((prev) => !prev);
-    executeUpdateProductUpvote(productId, upvote, hasUserUpvote);
-    setHasUserUpvote(true);
+    // executeUpdateProductUpvote(productId, upvote, hasUserUpvote);
+    // setHasUserUpvote(true);
   };
 
   return (

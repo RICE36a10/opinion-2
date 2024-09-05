@@ -61,7 +61,7 @@ const Home = () => {
       <Sidebar ref={sidebarRef} isMobile={isMobile} isOpen={isOpen} />
       <ContentWrapper>
         <Header isMobile={isMobile} />
-        <FeedbackContainer />
+        {/* <FeedbackContainer /> */}
       </ContentWrapper>
       {isOpen && <Overlay />}
     </Container>

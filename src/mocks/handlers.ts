@@ -17,7 +17,10 @@ const allRequests = new Map<string, ProductRequest>();
 initialData.forEach((request) => {
   allRequests.set(request.id.toString(), request);
 });
-
+interface UpvoteData {
+  upvote: number;
+  hasUserUpvote: boolean;
+}
 const saveToLocalStorage = () => {
   localStorage.setItem(
     STORAGE_KEY,
@@ -102,16 +105,16 @@ export const handlers = [
     async ({ params, request }) => {
       try {
         const { id } = params;
-        const { upvote, hasUserUpvote } = await request.json();
+        const { upvote, hasUserUpvote } = (await request.json()) as UpvoteData;
         const productRequest = allRequests.get(id as string);
-        console.log(productRequest);
         if (!productRequest) {
           return new HttpResponse(null, { status: 404 });
         }
-        productRequest.upvotes =
-          upvote && !hasUserUpvote
-            ? productRequest.upvotes + 1
-            : productRequest.upvotes - 1;
+        if (upvote && !hasUserUpvote) {
+          productRequest.upvotes = productRequest.upvotes + 1;
+        } else if (upvote! && !hasUserUpvote) {
+          productRequest.upvotes = productRequest.upvotes - 1;
+        }
 
         allRequests.set(id as string, productRequest);
         saveToLocalStorage();
