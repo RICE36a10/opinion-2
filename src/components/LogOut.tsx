@@ -1,8 +1,9 @@
-import React from "react";
 import styled from "styled-components";
 import { LogButton } from "@/styles/LogButton";
-import { signOut } from "firebase/auth";
-import { auth } from "@/config/firebase";
+import { logOutUser } from "@/redux/actions/user";
+import { AppDispatch } from "@/redux/store";
+import { useDispatch } from "react-redux";
+
 const LogOutBtn = styled(LogButton)`
   @media (max-width: 767.98px) {
     margin-left: 0;
@@ -11,14 +12,10 @@ const LogOutBtn = styled(LogButton)`
 `;
 
 const LogOut = () => {
-  const logOut = async () => {
-    try {
-      signOut(auth);
-    } catch (err) {
-      console.error(err);
-    }
+  const dispatch: AppDispatch = useDispatch();
+  const logOut = () => {
+    dispatch(logOutUser());
   };
-
   return <LogOutBtn onClick={logOut}>Sign Out</LogOutBtn>;
 };
 

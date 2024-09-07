@@ -1,18 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-// import { useGoogleLogin, TokenResponse } from "@react-oauth/google";
-// import { useDispatch, useSelector } from "react-redux";
-// import { RootState, AppDispatch } from "@/redux/store";
-// import { getUser } from "@/redux/actions/user";
 import { LogButton } from "@/styles/LogButton";
-
-import { auth, googleProvider } from "@/config/firebase";
-import {
-  signInWithPopup,
-  setPersistence,
-  browserSessionPersistence,
-} from "firebase/auth";
-
+import { getUser } from "@/redux/actions/user";
+import { AppDispatch } from "@/redux/store";
+import { useDispatch } from "react-redux";
 const LogInBtn = styled(LogButton)<{ isMenu: boolean | undefined }>`
   ${({ isMenu }) =>
     isMenu &&
@@ -25,16 +16,11 @@ interface loginProps {
 }
 
 const LogIn: React.FC<loginProps> = ({ isMenu }) => {
-  const login = async () => {
-    try {
-      await setPersistence(auth, browserSessionPersistence);
-      await signInWithPopup(auth, googleProvider);
-      console.log(auth);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  const dispatch: AppDispatch = useDispatch();
 
+  const login = () => {
+    dispatch(getUser());
+  };
   return (
     <LogInBtn
       isMenu={isMenu}

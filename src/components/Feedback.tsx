@@ -2,14 +2,14 @@ import React from "react";
 import styled from "styled-components";
 import UpvoteButton from "./UI/UpvoteButton";
 import CommentIcon from "@/assets/shared/icon-comments.svg";
-import { ProductRequest } from "@/types/productRequest";
-const Feedback: React.FC<{ feedback: ProductRequest }> = ({ feedback }) => {
-  const { title, description, category, comments, upvotes, id } = feedback;
-  const isComments = comments?.length;
+import { Request } from "@/types/request";
+const Feedback: React.FC<{ feedback: Request }> = ({ feedback }) => {
+  const { title, description, category, commentCount, upvotes, id } = feedback;
+  const isComments = commentCount;
   return (
     <FeedbackWrapper>
       <ContentWrapper>
-        <UpvoteButton vote={upvotes} productId={String(id)} />
+        <UpvoteButton vote={upvotes} id={id} />
         <Content>
           <h3>{title}</h3>
           <p>{description}</p>
@@ -20,7 +20,7 @@ const Feedback: React.FC<{ feedback: ProductRequest }> = ({ feedback }) => {
       <Comment>
         <img src={CommentIcon} alt="comment" />
         <span className={!isComments ? "opacity" : ""}>
-          {isComments ? comments.length : 0}
+          {isComments ? commentCount : 0}
         </span>
       </Comment>
     </FeedbackWrapper>

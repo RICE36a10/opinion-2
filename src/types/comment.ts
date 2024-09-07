@@ -4,6 +4,6 @@ import { Reply } from "./reply";
 export interface Comment {
   id: string;
   content: string;
-  user: User;
+  user?: User;
   replies?: Reply[];
 }

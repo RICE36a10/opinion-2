@@ -1,28 +1,34 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { auth, googleProvider } from "@/config/firebase";
+import { signOut } from "firebase/auth";
+import { signInWithPopup } from "firebase/auth";
 
 export const getUser = createAsyncThunk(
   "user/getUser",
   async (_, { rejectWithValue }) => {
-    const accessToken = localStorage.getItem("accessToken");
-    if (accessToken) {
-      try {
-        const response = await axios.get(
-          `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${accessToken}`,
-          {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-              Accept: "application/json",
-            },
-          }
-        );
-        return response.data;
-      } catch (err) {
-        if (axios.isAxiosError(err)) {
-          return rejectWithValue(err.response?.data || "Failed to fetch User");
-        } else {
-          return rejectWithValue("An unexpected error occurred");
-        }
+    try {
+      await signInWithPopup(auth, googleProvider);
+      return auth.currentUser!.providerData[0];
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        return rejectWithValue(err.response?.data || "Failed to fetch User");
+      } else {
+        return err;
+      }
+    }
+  }
+);
+export const logOutUser = createAsyncThunk(
+  "user/logOutUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      signOut(auth);
+    } catch (err) {
+      if (axios.isAxiosError(err)) {
+        return rejectWithValue(err.response?.data || "Failed to log out User");
+      } else {
+        return err;
       }
     }
   }

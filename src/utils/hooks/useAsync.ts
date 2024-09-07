@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-// export type Execute<A extends unknown[]> = (...args: A) => Promise<void>;
+
 interface UseAsyncOptions<T> {
   immediate?: boolean;
   onError?: (err: unknown) => void;
@@ -13,14 +13,8 @@ interface UseAsyncReturn<T> {
   error: boolean;
 }
 
-function isApiResponse<T>(response: unknown): response is { data: T } {
-  return (
-    typeof response === "object" && response !== null && "data" in response
-  );
-}
-
 const useAsync = <T>(
-  asyncFn: (...args: unknown[]) => Promise<T | { data: T }>,
+  asyncFn: (...args: unknown[]) => Promise<T>,
   options: UseAsyncOptions<T> = {}
 ): UseAsyncReturn<T> => {
   const { immediate = false, onSuccess, onError } = options;
@@ -36,13 +30,9 @@ const useAsync = <T>(
 
       try {
         const response = await asyncFn(...args);
-        const resolvedData: T = isApiResponse(response)
-          ? response.data
-          : response;
-
-        setData(resolvedData);
+        setData(response);
         if (onSuccess) {
-          onSuccess(resolvedData);
+          onSuccess(response);
         }
       } catch (err) {
         setData(null);

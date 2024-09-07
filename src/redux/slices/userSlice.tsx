@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { getUser } from "../actions/user";
+import { getUser, logOutUser } from "../actions/user";
 import { UserState } from "@/types/user";
+import { authUser } from "@/types/user";
 const initialState: UserState = {
   user: null,
   error: null,
@@ -9,22 +10,22 @@ const initialState: UserState = {
 const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {
-    logoutUser: () => {
-      localStorage.removeItem("accessToken");
-      return { ...initialState };
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getUser.fulfilled, (state, { payload }) => {
-      state.user = payload;
+      state.user = payload as authUser;
     });
     builder.addCase(getUser.rejected, (state, { payload }) => {
       state.user = null;
       state.error = payload as string;
     });
+    builder.addCase(logOutUser.fulfilled, (state) => {
+      state.user = null;
+    });
+    builder.addCase(logOutUser.rejected, (state, { payload }) => {
+      state.error = payload as string;
+    });
   },
 });
 
-export const { logoutUser } = userSlice.actions;
 export default userSlice.reducer;

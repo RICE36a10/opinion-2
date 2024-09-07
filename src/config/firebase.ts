@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 const firebaseConfig = {
   apiKey: "AIzaSyABNp4nr-iPTQRIj43oDZ0s6Jlg1ByNsog",
   authDomain: "product-feedback-app-60541.firebaseapp.com",
@@ -14,3 +15,5 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
+
+export const db = getFirestore(app);

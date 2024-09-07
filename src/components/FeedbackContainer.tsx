@@ -1,19 +1,19 @@
 import React from "react";
 import styled from "styled-components";
 import Feedback from "./Feedback";
-import { getAllFeedbacks } from "@/api/services/feedback";
-import useAsync from "@/utils/hooks/useAsync";
-import { ProductRequest } from "@/types/productRequest";
+import { Request } from "@/types/request";
 import loadingImg from "@/assets/loading-gear.svg";
 import NotFound from "./NotFound";
+import useAsync from "@/utils/hooks/useAsync";
+import { getFeedbacks } from "@/services/feedback";
+
 const FeedbackContainer = () => {
   const { data: feedbackData, loading: isDataLoading } = useAsync(
-    () => getAllFeedbacks(),
+    () => getFeedbacks(),
     {
       immediate: true,
     }
   );
-
   const renderFeedbacks = () => {
     if (isDataLoading) {
       return (
@@ -25,7 +25,7 @@ const FeedbackContainer = () => {
     if (feedbackData?.length === 0) {
       return <NotFound />;
     }
-    return feedbackData?.map((feedback: ProductRequest) => (
+    return feedbackData?.map((feedback: Request) => (
       <Feedback key={feedback.id} feedback={feedback} />
     ));
   };

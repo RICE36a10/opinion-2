@@ -3,15 +3,16 @@ export interface User {
   name: string;
   username: string;
 }
+
+export interface authUser {
+  displayName: string | null;
+  email: string | null;
+  photoURL: string | null;
+  uid: string;
+  providerId: string | null;
+  phoneNumber: string | null;
+}
 export interface UserState {
-  user: {
-    email: string;
-    family_name: string;
-    given_name: string;
-    id: string;
-    name: string;
-    picture: string;
-    verified_email: boolean;
-  } | null;
+  user: authUser | null;
   error: string | null;
 }
