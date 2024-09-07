@@ -6,4 +6,5 @@ export interface Request {
   status: string;
   description: string;
   commentCount: number;
+  upvotedBy: string[];
 }

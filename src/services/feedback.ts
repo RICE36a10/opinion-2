@@ -39,28 +39,28 @@ export const upvoteFeedback = async (feedbackId: string, userId: string) => {
         throw new Error("Feedback not found");
       }
 
-      const upvotedBy = feedbackDoc.data()!.upvotedBy || [];
+      const upvotedBy = feedbackDoc.data()!.upvotedBy;
       const hasUpvoted = upvotedBy.includes(userId);
 
       if (hasUpvoted) {
         transaction.update(feedbackRef, {
           upvotes: increment(-1),
           upvotedBy: arrayRemove(userId),
-          hasUpvoted,
         });
         return {
           success: true,
           message: "Vote is added successfully",
+          hasUpvoted,
         };
       } else {
         transaction.update(feedbackRef, {
           upvotes: increment(1),
           upvotedBy: arrayUnion(userId),
-          hasUpvoted,
         });
         return {
           success: true,
           message: "Vote is removed successfully",
+          hasUpvoted,
         };
       }
     });

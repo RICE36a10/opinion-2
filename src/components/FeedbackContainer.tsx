@@ -14,6 +14,7 @@ const FeedbackContainer = () => {
       immediate: true,
     }
   );
+
   const renderFeedbacks = () => {
     if (isDataLoading) {
       return (

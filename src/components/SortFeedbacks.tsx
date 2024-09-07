@@ -7,13 +7,13 @@ import styled from "styled-components";
 
 const SortFeedbacks = () => {
   const options = [
-    "Most Upvotes",
-    "Least Upvotes",
-    "Most Comments",
-    "Least Comments",
+    { name: "Most Upvotes", id: "descUpvotes" },
+    { name: "Least Upvotes", id: "ascUpvotes" },
+    { name: "Most Comments", id: "descComments" },
+    { name: "Least Comments", id: "ascComments" },
   ];
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedOption, setSelectedOption] = useState<string>(options[0]);
+  const [selectedOption, setSelectedOption] = useState<string>(options[0].name);
 
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);

@@ -4,12 +4,13 @@ import UpvoteButton from "./UI/UpvoteButton";
 import CommentIcon from "@/assets/shared/icon-comments.svg";
 import { Request } from "@/types/request";
 const Feedback: React.FC<{ feedback: Request }> = ({ feedback }) => {
-  const { title, description, category, commentCount, upvotes, id } = feedback;
+  const { title, description, category, commentCount, upvotes, id, upvotedBy } =
+    feedback;
   const isComments = commentCount;
   return (
     <FeedbackWrapper>
       <ContentWrapper>
-        <UpvoteButton vote={upvotes} id={id} />
+        <UpvoteButton vote={upvotes} id={id} upvotedBy={upvotedBy} />
         <Content>
           <h3>{title}</h3>
           <p>{description}</p>

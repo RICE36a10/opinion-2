@@ -31,7 +31,7 @@ const Option = styled.button`
   }
 `;
 interface DropdownProps {
-  options: string[];
+  options: { name: string; id: string }[];
   setOption: React.Dispatch<React.SetStateAction<string>>;
   closeDropdown: () => void;
   selectedOption: string;
@@ -51,9 +51,15 @@ const Dropdown: React.FC<DropdownProps> = ({
   return (
     <DropdownWrapper>
       {options.map((option) => (
-        <Option onClick={() => handleClick(option)}>
-          {option}
-          {option === selectedOption && <img src={CheckIcon} alt="Check" />}
+        <Option
+          onClick={() => {
+            handleClick(option.name);
+          }}
+        >
+          {option.name}
+          {option.name === selectedOption && (
+            <img src={CheckIcon} alt="Check" />
+          )}
         </Option>
       ))}
     </DropdownWrapper>

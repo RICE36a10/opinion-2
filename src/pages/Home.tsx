@@ -53,6 +53,8 @@ const Home = () => {
   const handleClose = () => {
     setIsOpen(false);
   };
+  // Handle Sort
+
   return (
     <Container>
       {isMobile && (

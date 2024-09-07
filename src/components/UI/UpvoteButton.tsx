@@ -1,44 +1,74 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import styled from "styled-components";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { upvoteFeedback } from "@/services/feedback";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-const UpvoteButton: React.FC<{ vote: number; id: string }> = ({ vote, id }) => {
+import Modal from "./Modal";
+const UpvoteButton: React.FC<{
+  vote: number;
+  id: string;
+  upvotedBy: string[];
+}> = ({ vote, id, upvotedBy }) => {
   const { user } = useSelector((state: RootState) => {
     return state.User;
   });
-  const [upvote, setUpvote] = useState(false);
+  const [upvotedUsers, setUpvotedUsers] = useState(upvotedBy);
   const [voteCount, setVoteCount] = useState(vote);
+  const [isOpen, setIsOpen] = useState(false);
+  const isUpvoted = user?.uid ? upvotedUsers.includes(user.uid) : false;
+  const [upvote, setUpvote] = useState(isUpvoted);
+
+  const updateUpvotedUsers = (flag: boolean) => {
+    if (user) {
+      const hasUpvoted = flag;
+      if (hasUpvoted) {
+        setUpvotedUsers(upvotedUsers.filter((uid) => uid !== user.uid));
+      } else {
+        setUpvotedUsers([...upvotedUsers, user.uid]);
+      }
+    }
+  };
+  const onClose = () => {
+    setIsOpen(false);
+  };
+  useEffect(() => {
+    setUpvote(isUpvoted);
+    setVoteCount(voteCount);
+  }, [isUpvoted, user]);
   const toggleClick = async () => {
     if (user) {
       try {
         const result = await upvoteFeedback(id, user.uid);
-        if (result?.success) {
-          setUpvote((prev) => !prev);
-          setVoteCount(result.upvoteCount);
-        }
-      } catch (err) {
-        console.error(err);
+        const hasUpvoted = result?.hasUpvoted;
+        setUpvote(!hasUpvoted);
+        setVoteCount(hasUpvoted ? (prev) => prev - 1 : (prev) => prev + 1);
+        updateUpvotedUsers(hasUpvoted);
+      } catch (error) {
+        console.error("Error upvoting feedback:", error);
       }
     } else {
-      console.log("User not logged in");
-      // Show login modal or redirect to login page.
+      setIsOpen(true);
     }
   };
 
   return (
-    <Button title="Vote" onClick={toggleClick} upvoteProp={upvote}>
-      <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M1 6l4-4 4 4"
-          stroke="#4661E6"
-          stroke-width="2"
-          fill="none"
-          fill-rule="evenodd"
-        />
-      </svg>
-      {voteCount}
-    </Button>
+    <>
+      {" "}
+      <Button title="Vote" onClick={toggleClick} upvoteProp={upvote}>
+        <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M1 6l4-4 4 4"
+            stroke="#4661E6"
+            stroke-width="2"
+            fill="none"
+            fill-rule="evenodd"
+          />
+        </svg>
+        {voteCount}
+      </Button>
+      <Modal isOpen={isOpen} onClose={onClose} />
+    </>
   );
 };
 const Button = styled.button<{ upvoteProp: boolean }>`

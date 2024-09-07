@@ -35,7 +35,9 @@ const Suggestion = styled.div`
   }
 `;
 
-const Header: React.FC<{ isMobile: boolean }> = ({ isMobile }) => {
+const Header: React.FC<{
+  isMobile: boolean;
+}> = ({ isMobile }) => {
   const { user } = useSelector((state: RootState) => {
     return state.User;
   });

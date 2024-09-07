@@ -13,9 +13,10 @@ const LogInBtn = styled(LogButton)<{ isMenu: boolean | undefined }>`
 `;
 interface loginProps {
   isMenu?: boolean;
+  onClose?: () => void;
 }
 
-const LogIn: React.FC<loginProps> = ({ isMenu }) => {
+const LogIn: React.FC<loginProps> = ({ isMenu, onClose }) => {
   const dispatch: AppDispatch = useDispatch();
 
   const login = () => {
@@ -26,6 +27,7 @@ const LogIn: React.FC<loginProps> = ({ isMenu }) => {
       isMenu={isMenu}
       onClick={() => {
         login();
+        onClose && onClose();
       }}
     >
       <svg
