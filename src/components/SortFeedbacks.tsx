@@ -4,16 +4,21 @@ import ArrowDown from "@/assets/shared/icon-arrow-down-white.svg";
 import ArrowUp from "@/assets/shared/icon-arrow-up-white.svg";
 import { useState } from "react";
 import styled from "styled-components";
-
+import { sortOptions } from "@/types/request";
+import { sortByOrder } from "@/types/request";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
 const SortFeedbacks = () => {
-  const options = [
-    { name: "Most Upvotes", id: "descUpvotes" },
-    { name: "Least Upvotes", id: "ascUpvotes" },
-    { name: "Most Comments", id: "descComments" },
-    { name: "Least Comments", id: "ascComments" },
+  const options: sortOptions = [
+    { name: "Most Upvotes", id: sortByOrder.DESC_UPVOTES },
+    { name: "Least Upvotes", id: sortByOrder.ASC_UPVOTES },
+    { name: "Most Comments", id: sortByOrder.DESC_COMMENTS },
+    { name: "Least Comments", id: sortByOrder.ASC_COMMENTS },
   ];
+  const { sortBy: selectedOption } = useSelector(
+    (state: RootState) => state.Filter
+  );
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [selectedOption, setSelectedOption] = useState<string>(options[0].name);
 
   const toggleDropdown = () => {
     setIsOpen((prev) => !prev);
@@ -26,15 +31,15 @@ const SortFeedbacks = () => {
     <SortContainer>
       <SortButton onClick={toggleDropdown}>
         <span className="sort-text">Sort by :</span>{" "}
-        <span className={isOpen ? "opacity" : ""}>{selectedOption}</span>
+        <span className={isOpen ? "opacity" : ""}>{selectedOption.name}</span>
         {isOpen ? <img src={ArrowUp} /> : <img src={ArrowDown} />}
       </SortButton>
       {isOpen && (
         <Dropdown
           options={options}
-          setOption={setSelectedOption}
           closeDropdown={closeDropdown}
           selectedOption={selectedOption}
+          type="sortByOrder"
         />
       )}
     </SortContainer>

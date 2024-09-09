@@ -5,30 +5,7 @@ import {
   arrayRemove,
   runTransaction,
   increment,
-  getDocs,
-  collection,
-  getCountFromServer,
 } from "firebase/firestore";
-import { Request } from "@/types/request";
-export const getFeedbacks = async () => {
-  const feedbackCollectionRef = collection(db, "Feedbacks");
-  const snapshot = await getDocs(feedbackCollectionRef);
-
-  const feedbacks = await Promise.all(
-    snapshot.docs.map(async (doc) => {
-      const feedbackData = doc.data();
-      const commentsCollectionRef = collection(doc.ref, "comments");
-      const commentsCount = await getCountFromServer(commentsCollectionRef);
-
-      return {
-        ...feedbackData,
-        id: doc.id,
-        commentCount: commentsCount.data().count,
-      } as Request;
-    })
-  );
-  return feedbacks;
-};
 
 export const upvoteFeedback = async (feedbackId: string, userId: string) => {
   const feedbackRef = doc(db, "Feedbacks", feedbackId);

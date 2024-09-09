@@ -1,6 +1,4 @@
-type Category = "All" | "UI" | "UX" | "Enhancement" | "Bug" | "Feature";
-
-export const Categories: Category[] = [
+export const Categories: string[] = [
   "All",
   "UI",
   "UX",

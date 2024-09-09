@@ -41,11 +41,19 @@ const Header: React.FC<{
   const { user } = useSelector((state: RootState) => {
     return state.User;
   });
+  const { feedbackData } = useSelector((state: RootState) => {
+    return state.Feedback;
+  });
+
+  const suggestionCount =
+    feedbackData &&
+    feedbackData.filter((feedback) => feedback.status === "suggestion").length;
+
   return (
     <StyledHeader>
       <img src={Icon} alt="Suggestion icon" />
       <Suggestion>
-        <span className="count">6</span> Suggestions
+        <span className="count">{suggestionCount}</span> Suggestions
       </Suggestion>
       <SortFeedbacks />
       {user && <AddButton />}

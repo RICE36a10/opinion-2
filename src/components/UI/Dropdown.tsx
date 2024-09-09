@@ -1,6 +1,10 @@
 import React from "react";
 import styled from "styled-components";
 import CheckIcon from "@/assets/shared/icon-check.svg";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { setSortBy } from "@/redux/slices/filterSlice";
+import { sortByOrder } from "@/types/request";
 const DropdownWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -32,32 +36,32 @@ const Option = styled.button`
 `;
 interface DropdownProps {
   options: { name: string; id: string }[];
-  setOption: React.Dispatch<React.SetStateAction<string>>;
   closeDropdown: () => void;
-  selectedOption: string;
+  selectedOption: { name: string; id: sortByOrder };
+  type: string;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
   options,
-  setOption,
   closeDropdown,
   selectedOption,
+  type,
 }) => {
-  const handleClick = (option: string) => {
-    setOption(option);
-    closeDropdown();
-  };
+  const dispatch = useDispatch<AppDispatch>();
 
   return (
     <DropdownWrapper>
       {options.map((option) => (
         <Option
           onClick={() => {
-            handleClick(option.name);
+            closeDropdown();
+            if (type === "sortByOrder") {
+              dispatch(setSortBy(option));
+            }
           }}
         >
           {option.name}
-          {option.name === selectedOption && (
+          {option.name === selectedOption.name && (
             <img src={CheckIcon} alt="Check" />
           )}
         </Option>

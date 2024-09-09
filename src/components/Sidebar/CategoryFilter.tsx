@@ -1,6 +1,8 @@
 import { Categories } from "@/utils/constants/Categories";
 import styled from "styled-components";
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { setFilterByCategory } from "@/redux/slices/filterSlice";
 interface CategoryItemProps {
   selected: boolean;
 }
@@ -32,17 +34,21 @@ const CategoryItem = styled.button<CategoryItemProps>`
   }
 `;
 const CategoryFilter = () => {
-  const [selectedCategory, setSelectedCategory] = useState<string>(
-    Categories[0]
+  const { filterByCategory: selectedCategory } = useSelector(
+    (state: RootState) => state.Filter
   );
+  const dispatch = useDispatch<AppDispatch>();
+
   return (
     <CategoryWrapper>
       {Categories.map((category, index) => (
         <CategoryItem
           key={index}
           type="button"
-          selected={selectedCategory === category}
-          onClick={() => setSelectedCategory(category)}
+          selected={selectedCategory === category.toLocaleLowerCase()}
+          onClick={() => {
+            dispatch(setFilterByCategory(category.toLowerCase()));
+          }}
         >
           {category}
         </CategoryItem>

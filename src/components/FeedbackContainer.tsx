@@ -1,22 +1,31 @@
-import React from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 import Feedback from "./Feedback";
 import { Request } from "@/types/request";
 import loadingImg from "@/assets/loading-gear.svg";
 import NotFound from "./NotFound";
-import useAsync from "@/utils/hooks/useAsync";
-import { getFeedbacks } from "@/services/feedback";
+import { sortFeedbacks } from "@/utils/helper";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "@/redux/store";
+import { getFeedbacks } from "@/redux/actions/feedback";
 
 const FeedbackContainer = () => {
-  const { data: feedbackData, loading: isDataLoading } = useAsync(
-    () => getFeedbacks(),
-    {
-      immediate: true,
-    }
+  const dispatch = useDispatch<AppDispatch>();
+  const { feedbackData, loading } = useSelector(
+    (state: RootState) => state.Feedback
   );
+  let sortedFeedbacks: Request[];
+  useEffect(() => {
+    dispatch(getFeedbacks());
+  }, []);
 
+  const { sortBy, filterByCategory: category } = useSelector(
+    (state: RootState) => state.Filter
+  );
+  console.log(feedbackData);
+  console.log(category);
   const renderFeedbacks = () => {
-    if (isDataLoading) {
+    if (loading) {
       return (
         <Loading>
           <img src={loadingImg} alt="Loading" />
@@ -26,7 +35,13 @@ const FeedbackContainer = () => {
     if (feedbackData?.length === 0) {
       return <NotFound />;
     }
-    return feedbackData?.map((feedback: Request) => (
+    if (feedbackData) {
+      const filteredData = feedbackData.filter(
+        (feedback) => feedback.status === "suggestion"
+      );
+      sortedFeedbacks = sortFeedbacks(filteredData, sortBy.id, category);
+    }
+    return sortedFeedbacks?.map((feedback: Request) => (
       <Feedback key={feedback.id} feedback={feedback} />
     ));
   };
