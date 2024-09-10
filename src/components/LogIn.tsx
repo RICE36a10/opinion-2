@@ -13,7 +13,7 @@ const LogInBtn = styled(LogButton)<{ isMenu: boolean | undefined }>`
 `;
 interface loginProps {
   isMenu?: boolean;
-  onClose?: () => void;
+  onClose?: (e: React.MouseEvent) => void;
 }
 
 const LogIn: React.FC<loginProps> = ({ isMenu, onClose }) => {
@@ -25,9 +25,9 @@ const LogIn: React.FC<loginProps> = ({ isMenu, onClose }) => {
   return (
     <LogInBtn
       isMenu={isMenu}
-      onClick={() => {
+      onClick={(e) => {
         login();
-        onClose && onClose();
+        onClose && onClose(e);
       }}
     >
       <svg

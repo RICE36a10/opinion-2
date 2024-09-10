@@ -24,6 +24,8 @@ const StatusHeader = styled.div`
     font-weight: 600;
     font-size: var(--body3-size);
     line-height: var(--body3-line);
+    color: var(--link-color);
+    text-decoration: underline;
   }
 `;
 const StatusBody = styled.div`

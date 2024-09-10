@@ -17,7 +17,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   a {
-    color: var(--link-color);
+    text-decoration:none;
   }
 
 

@@ -1,22 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-const Button = styled.button`
-  width: 158px;
-  min-height: 44px;
-  border-radius: var(--border-radius);
+import { CommonButton } from "@/styles/CommonButton";
+const Button = styled(CommonButton)`
   background: var(--button-color);
-  font-weight: 700;
-  color: #f2f4fe;
-  font-size: var(--h4-size);
-  line-height: var(--h4-line);
   &:hover {
     background: #c75af6;
-  }
-  @media (max-width: 767.98px) {
-    min-height: 40px;
-    width: 134px;
-    font-size: var(--body3-size);
-    line-height: var(--body3-line);
   }
 `;
 const AddButton = () => {

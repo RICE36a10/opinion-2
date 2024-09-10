@@ -29,21 +29,25 @@ const UpvoteButton: React.FC<{
       }
     }
   };
-  const onClose = () => {
+  const onClose = (e: React.MouseEvent) => {
+    e.preventDefault();
     setIsOpen(false);
   };
   useEffect(() => {
     setUpvote(isUpvoted);
     setVoteCount(voteCount);
   }, [isUpvoted, user]);
-  const toggleClick = async () => {
+  const toggleClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
     if (user) {
       try {
         const result = await upvoteFeedback(id, user.uid);
-        const hasUpvoted = result?.hasUpvoted;
-        setUpvote(!hasUpvoted);
-        setVoteCount(hasUpvoted ? (prev) => prev - 1 : (prev) => prev + 1);
-        updateUpvotedUsers(hasUpvoted);
+        if (result) {
+          const hasUpvoted = result.hasUpvoted;
+          setUpvote(!hasUpvoted);
+          setVoteCount(hasUpvoted ? (prev) => prev - 1 : (prev) => prev + 1);
+          updateUpvotedUsers(hasUpvoted);
+        }
       } catch (error) {
         console.error("Error upvoting feedback:", error);
       }

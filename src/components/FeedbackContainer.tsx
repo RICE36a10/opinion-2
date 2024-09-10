@@ -22,8 +22,7 @@ const FeedbackContainer = () => {
   const { sortBy, filterByCategory: category } = useSelector(
     (state: RootState) => state.Filter
   );
-  console.log(feedbackData);
-  console.log(category);
+
   const renderFeedbacks = () => {
     if (loading) {
       return (
@@ -51,8 +50,12 @@ const FeedbackContainer = () => {
 const FeedbackWrapper = styled.section`
   padding: 20px 0;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   @media (max-width: 1024px) {
     padding: 24px 0;
+    gap: 16px;
   }
   @media (max-width: 767.98px) {
     padding: 32px 24px 48px;

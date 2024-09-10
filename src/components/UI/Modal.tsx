@@ -4,10 +4,10 @@ import { Button } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
-const Modal: React.FC<{ isOpen: boolean; onClose: () => void }> = ({
-  isOpen,
-  onClose,
-}) => {
+const Modal: React.FC<{
+  isOpen: boolean;
+  onClose: (e: React.MouseEvent) => void;
+}> = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (

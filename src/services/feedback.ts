@@ -1,11 +1,15 @@
 import { db } from "@/config/firebase";
 import {
   doc,
+  getDoc,
+  getDocs,
   arrayUnion,
   arrayRemove,
   runTransaction,
   increment,
+  collection,
 } from "firebase/firestore";
+import { Comment, SingleRequest } from "@/types/request";
 
 export const upvoteFeedback = async (feedbackId: string, userId: string) => {
   const feedbackRef = doc(db, "Feedbacks", feedbackId);
@@ -19,30 +23,45 @@ export const upvoteFeedback = async (feedbackId: string, userId: string) => {
       const upvotedBy = feedbackDoc.data()!.upvotedBy;
       const hasUpvoted = upvotedBy.includes(userId);
 
-      if (hasUpvoted) {
-        transaction.update(feedbackRef, {
-          upvotes: increment(-1),
-          upvotedBy: arrayRemove(userId),
-        });
-        return {
-          success: true,
-          message: "Vote is added successfully",
-          hasUpvoted,
-        };
-      } else {
-        transaction.update(feedbackRef, {
-          upvotes: increment(1),
-          upvotedBy: arrayUnion(userId),
-        });
-        return {
-          success: true,
-          message: "Vote is removed successfully",
-          hasUpvoted,
-        };
-      }
+      transaction.update(feedbackRef, {
+        upvotes: hasUpvoted ? increment(-1) : increment(1),
+        upvotedBy: hasUpvoted ? arrayRemove(userId) : arrayUnion(userId),
+        hasUpvoted: !hasUpvoted,
+      });
+      return {
+        success: true,
+        message: hasUpvoted
+          ? "Vote is removed successfully"
+          : "Vote is added successfully",
+        hasUpvoted,
+      };
     });
     return result;
   } catch (err) {
     console.error("Error in upvote operation:", err);
   }
+};
+export const getFeedbackById = async (feedbackId: string) => {
+  const feedbackRef = doc(db, "Feedbacks", feedbackId);
+  const feedbackDoc = await getDoc(feedbackRef);
+  if (!feedbackDoc.exists()) {
+    throw new Error("Feedback not found");
+  }
+  const feedbackData = feedbackDoc.data();
+  const commentsRef = collection(feedbackRef, "comments");
+  const commentsSnapshot = await getDocs(commentsRef);
+
+  const comments: Comment[] = [];
+  commentsSnapshot.forEach((doc) => {
+    comments.push({
+      id: doc.id,
+      ...doc.data(),
+    } as Comment);
+  });
+  return {
+    id: feedbackDoc.id,
+    ...feedbackData,
+    comments,
+    commentCount: comments.length,
+  } as SingleRequest;
 };

@@ -2,12 +2,17 @@ import React from "react";
 import styled from "styled-components";
 import UpvoteButton from "./UI/UpvoteButton";
 import CommentIcon from "@/assets/shared/icon-comments.svg";
-import { Request } from "@/types/request";
-const Feedback: React.FC<{ feedback: Request }> = ({ feedback }) => {
+import { Request, SingleRequest } from "@/types/request";
+import { Link } from "react-router-dom";
+
+const Feedback: React.FC<{
+  feedback: Request | SingleRequest;
+  isSingle?: boolean;
+}> = ({ feedback, isSingle }) => {
   const { title, description, category, commentCount, upvotes, id, upvotedBy } =
     feedback;
   const isComments = commentCount;
-  return (
+  const FeedbackContent = (
     <FeedbackWrapper>
       <ContentWrapper>
         <UpvoteButton vote={upvotes} id={id} upvotedBy={upvotedBy} />
@@ -26,6 +31,11 @@ const Feedback: React.FC<{ feedback: Request }> = ({ feedback }) => {
       </Comment>
     </FeedbackWrapper>
   );
+  return isSingle ? (
+    FeedbackContent
+  ) : (
+    <Link to={`/feedbacks/${id}`}>{FeedbackContent}</Link>
+  );
 };
 
 const FeedbackWrapper = styled.div`
@@ -34,7 +44,7 @@ const FeedbackWrapper = styled.div`
   padding: 28px 32px;
   border-radius: var(--border-radius);
   background: var(--primary-color);
-  cursor: pointer;
+
   @media (max-width: 767.98px) {
     gap: unset;
     position: relative;
@@ -42,12 +52,6 @@ const FeedbackWrapper = styled.div`
   }
   &:hover h3 {
     color: var(--link-color);
-  }
-  &:not(:last-of-type) {
-    margin-bottom: 20px;
-    @media (max-width: 1024px) {
-      margin-bottom: 16px;
-    }
   }
 `;
 const Content = styled.div`
@@ -58,6 +62,10 @@ const Content = styled.div`
     letter-spacing: var(h3-spacing);
     margin-bottom: 4px;
     transition: var(--transition);
+    color: var(--text-primary);
+    &:hover {
+      color: var(--link-color);
+    }
     @media (max-width: 767.98px) {
       font-size: var(--body3-size);
       line-height: var(--body3-line);
