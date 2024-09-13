@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { LogButton } from "@/styles/LogButton";
-import { getUser } from "@/redux/actions/user";
+import { getUser, listenToAuthState } from "@/redux/actions/user";
 import { AppDispatch } from "@/redux/store";
 import { useDispatch } from "react-redux";
 const LogInBtn = styled(LogButton)<{ isMenu: boolean | undefined }>`
@@ -18,7 +18,9 @@ interface loginProps {
 
 const LogIn: React.FC<loginProps> = ({ isMenu, onClose }) => {
   const dispatch: AppDispatch = useDispatch();
-
+  useEffect(() => {
+    dispatch(listenToAuthState());
+  }, [dispatch]);
   const login = () => {
     dispatch(getUser());
   };

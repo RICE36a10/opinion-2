@@ -19,6 +19,10 @@ const Wrapper = styled.div`
     font-size: var(--h4-size);
     line-height: var(--h4-line);
     color: var(--text-secondary);
+    @media (max-width: 767.98px) {
+      font-size: var(--body3-size);
+      line-height: var(--body3-line);
+    }
     &:hover {
       text-decoration: underline;
     }

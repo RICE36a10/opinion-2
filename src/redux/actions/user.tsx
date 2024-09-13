@@ -1,8 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { auth, googleProvider } from "@/config/firebase";
-import { signOut } from "firebase/auth";
-import { signInWithPopup } from "firebase/auth";
+import {
+  signOut,
+  signInWithPopup,
+  onAuthStateChanged,
+  User,
+} from "firebase/auth";
 
 export const getUser = createAsyncThunk(
   "user/getUser",
@@ -17,6 +21,21 @@ export const getUser = createAsyncThunk(
         return err;
       }
     }
+  }
+);
+export const listenToAuthState = createAsyncThunk(
+  "user/listenToAuthState",
+  async (_, { dispatch }) => {
+    return new Promise<User | null>((resolve) => {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          dispatch(getUser.fulfilled(user.providerData[0], "", undefined));
+        } else {
+          dispatch(logOutUser.fulfilled(undefined, ""));
+        }
+        resolve(user);
+      });
+    });
   }
 );
 export const logOutUser = createAsyncThunk(

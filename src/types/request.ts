@@ -9,10 +9,15 @@ export interface Reply {
 export interface Comment {
   id: string;
   content: string;
-  user?: User;
+  user: User;
   replies?: Reply[];
 }
-
+export interface CommentBaseProps {
+  user: User;
+  content: string;
+  children?: React.ReactNode;
+  replyingTo?: string;
+}
 export interface Request {
   id: string;
   commentCount: number;

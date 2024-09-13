@@ -39,6 +39,7 @@ export const GlobalStyle = createGlobalStyle`
     --button-color: #ad1fea;
     --link-color:#4661e6; 
     --hover-color: #cfd7ff;
+    --error-color:#ed4337;
     
    
 
