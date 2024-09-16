@@ -10,10 +10,10 @@ import { editUserEmail } from "@/utils/helper";
 import { openModal } from "@/redux/slices/modalSlice";
 import { Comment } from "@/types/request";
 import { serverTimestamp, Timestamp } from "firebase/firestore";
+import { addComment as addCommentAction } from "@/redux/slices/commentSlice";
 const AddComment: React.FC<{
   feedbackId: string;
-  setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
-}> = ({ feedbackId, setComments }) => {
+}> = ({ feedbackId }) => {
   const { user } = useSelector((state: RootState) => state.User);
   const dispatch = useDispatch<AppDispatch>();
   const [commentText, setCommentText] = useState("");
@@ -22,7 +22,7 @@ const AddComment: React.FC<{
     addComment as (...args: unknown[]) => Promise<Comment | undefined>,
     {
       onSuccess: (response) => {
-        setComments((prev) => [...prev, response as Comment]);
+        dispatch(addCommentAction(response));
       },
     }
   );

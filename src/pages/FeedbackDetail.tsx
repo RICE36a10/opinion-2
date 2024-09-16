@@ -6,26 +6,30 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import Breadcrumb from "@/components/UI/Breadcrumb";
 import EditButton from "@/components/UI/EditButton";
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "@/redux/store";
 import Comments from "@/components/Comments";
 import AddComment from "@/components/AddComment";
 import loadingImg from "@/assets/loading-gear.svg";
-import { Comment } from "@/types/request";
-
+// import { Comment } from "@/types/request";
+import { setComments } from "@/redux/slices/commentSlice";
 const FeedbackDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => {
     return state.User;
   });
-  const [comments, setComments] = useState<Comment[]>([]);
-
+  const { comments } = useSelector((state: RootState) => {
+    return state.Comment;
+  });
+  console.log(comments);
   const { data: feedback, loading: isFeedbackLoading } = useAsync(
     () => getFeedbackById(id!),
     {
       immediate: true,
       onSuccess: (response) => {
-        setComments(response.comments);
+        dispatch(setComments(response.comments));
+        // setComments(response.comments);
       },
     }
   );
@@ -45,8 +49,8 @@ const FeedbackDetail = () => {
           {isAuthor && <EditButton />}
         </DetailHeader>
         <Feedback feedback={feedback} isSingle />
-        <Comments comments={comments} setComments={setComments} />
-        <AddComment feedbackId={id!} setComments={setComments} />
+        <Comments comments={comments} />
+        <AddComment feedbackId={id!} />
       </DetailContainer>
     )
   );

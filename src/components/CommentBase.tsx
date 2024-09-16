@@ -3,23 +3,25 @@ import styled from "styled-components";
 import { CommentBaseProps } from "@/types/request";
 import PostReply from "./PostReply";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "@/redux/store";
 import useAsync from "@/utils/hooks/useAsync";
 import { deleteComment } from "@/services/comment";
 import { useParams } from "react-router-dom";
+import { setComments } from "@/redux/slices/commentSlice";
 export const CommentBase: React.FC<CommentBaseProps> = ({
   user,
   content,
   children,
   replyingTo,
   id,
-  setComments,
 }) => {
   const [replying, setReplying] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
   const { user: AuthUser } = useSelector((state: RootState) => {
     return state.User;
   });
+  const { comments } = useSelector((state: RootState) => state.Comment);
   const { id: feedbackId } = useParams<{ id: string }>();
 
   const onReply = () => {
@@ -29,8 +31,8 @@ export const CommentBase: React.FC<CommentBaseProps> = ({
     deleteComment as (...args: unknown[]) => Promise<Comment | undefined>,
     {
       onSuccess: () => {
-        if (setComments)
-          setComments((prev) => prev.filter((comment) => comment.id !== id));
+        const updatedComments = comments.filter((comment) => comment.id !== id);
+        dispatch(setComments(updatedComments));
       },
     }
   );
@@ -62,7 +64,14 @@ export const CommentBase: React.FC<CommentBaseProps> = ({
           {replyingTo ? <span className="replyTo">@{replyingTo} </span> : ""}
           {content}
         </p>
-        {replying && <PostReply setReplying={setReplying} />}
+        {replying && (
+          <PostReply
+            setReplying={setReplying}
+            replyingTo={user.username}
+            commentId={id!}
+            feedbackId={feedbackId!}
+          />
+        )}
         {children && <ReplyContainer>{children}</ReplyContainer>}
       </CommentContent>
     </>

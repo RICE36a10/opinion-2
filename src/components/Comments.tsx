@@ -5,14 +5,13 @@ import { Comment as CommentType } from "@/types/request";
 
 const Comments: React.FC<{
   comments: CommentType[];
-  setComments: React.Dispatch<React.SetStateAction<CommentType[]>>;
-}> = ({ comments, setComments }) => {
+}> = ({ comments }) => {
   return (
     <CommentsContainer>
       <h2 className="c-count">{comments.length} Comments</h2>
       <CommentsWrapper>
         {comments.map((comment) => (
-          <Comment comment={comment} setComments={setComments} />
+          <Comment comment={comment} />
         ))}
       </CommentsWrapper>
     </CommentsContainer>

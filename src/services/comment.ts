@@ -1,6 +1,13 @@
 import { Comment as CommentType, Reply } from "@/types/request";
 import { db } from "@/config/firebase";
-import { doc, collection, addDoc, deleteDoc } from "firebase/firestore";
+import {
+  doc,
+  collection,
+  addDoc,
+  deleteDoc,
+  updateDoc,
+  arrayUnion,
+} from "firebase/firestore";
 export const addComment = async (
   feedbackId: string,
   commentData: Omit<CommentType, "id">
@@ -31,5 +38,23 @@ export const deleteComment = async (feedbackId: string, commentId: string) => {
 export const addReply = async (
   feedbackId: string,
   commentId: string,
-  replyData: Reply
-) => {};
+  replyData: Omit<Reply, "id">
+) => {
+  const feedbackRef = doc(db, "Feedbacks", feedbackId);
+  const commentDoc = doc(feedbackRef, "comments", commentId);
+  try {
+    console.log(replyData);
+    const replyId = doc(collection(db, "temp")).id;
+    const newReply: Reply = {
+      id: replyId,
+      ...replyData,
+    };
+    await updateDoc(commentDoc, {
+      replies: arrayUnion(newReply),
+    });
+
+    return newReply;
+  } catch (error) {
+    console.error(error);
+  }
+};

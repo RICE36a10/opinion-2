@@ -1,10 +1,11 @@
 import { User } from "./user";
 import { Timestamp } from "firebase/firestore";
 export interface Reply {
-  id?: string;
+  id: string;
   content: string;
   replyingTo: string;
   user: User;
+  createdAt: Timestamp;
 }
 export interface Comment {
   id: string;
@@ -16,10 +17,9 @@ export interface Comment {
 export interface CommentBaseProps {
   user: User;
   content: string;
-  id?: string;
+  id: string;
   children?: React.ReactNode;
   replyingTo?: string;
-  setComments?: React.Dispatch<React.SetStateAction<Comment[]>>;
 }
 export interface Request {
   id: string;

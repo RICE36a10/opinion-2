@@ -1,20 +1,57 @@
 import React, { ChangeEvent, useState } from "react";
+import useAsync from "@/utils/hooks/useAsync";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "@/redux/store";
+import { editUserEmail } from "@/utils/helper";
+import { openModal } from "@/redux/slices/modalSlice";
 import { Textbox } from "@/styles/Textbox";
 import { CommonButton } from "@/styles/CommonButton";
+import { Timestamp } from "firebase/firestore";
 import styled from "styled-components";
+import { addReply } from "@/services/comment";
+import { Comment } from "@/types/request";
 const PostReply: React.FC<{
   setReplying: React.Dispatch<React.SetStateAction<boolean>>;
-}> = ({ setReplying }) => {
+  replyingTo: string;
+  commentId: string;
+  feedbackId: string;
+}> = ({ setReplying, replyingTo, feedbackId, commentId }) => {
   const [replyContent, setReplyContent] = useState("");
   const [isError, setIsError] = useState(false);
+  const dispatch = useDispatch<AppDispatch>();
+  const { user } = useSelector((state: RootState) => state.User);
+  const { execute: executeAddReply } = useAsync(
+    addReply as (...args: unknown[]) => Promise<Comment | undefined>,
+    {
+      onSuccess: (response) => {
+        // setComments((prev) => [...prev, response as Comment]);
+      },
+    }
+  );
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (replyContent.length) {
-      setReplying(false);
-      setIsError(false);
+    if (user) {
+      if (replyContent.length) {
+        const replyData = {
+          content: replyContent,
+          user: {
+            image: user.photoURL,
+            name: user.displayName,
+            username: editUserEmail(user.email),
+            uid: user.uid,
+          },
+          replyingTo: replyingTo,
+          createdAt: Timestamp.now(),
+        };
+        setReplying(false);
+        setIsError(false);
+        executeAddReply(feedbackId, commentId, replyData);
+      } else {
+        setIsError(true);
+      }
     } else {
-      setIsError(true);
+      dispatch(openModal());
     }
   };
   return (

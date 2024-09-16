@@ -5,18 +5,14 @@ import { CommentBase } from "./CommentBase";
 
 const Comment: React.FC<{
   comment: CommentType;
-  setComments: React.Dispatch<React.SetStateAction<CommentType[]>>;
-}> = ({ comment, setComments }) => {
+}> = ({ comment }) => {
   const { replies, user, content, id } = comment;
   return (
-    <CommentBase
-      user={user}
-      content={content}
-      id={id}
-      setComments={setComments}
-    >
+    <CommentBase user={user} content={content} id={id}>
       {replies &&
-        replies.map((reply) => <Reply key={reply.id} reply={reply} />)}
+        replies.map((reply) => (
+          <Reply key={reply.id} reply={reply} commentId={id} />
+        ))}
     </CommentBase>
   );
 };
