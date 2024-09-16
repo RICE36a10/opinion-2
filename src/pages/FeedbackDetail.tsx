@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import useAsync from "@/utils/hooks/useAsync";
 import Feedback from "@/components/Feedback";
 import { getFeedbackById } from "@/services/feedback";
@@ -10,32 +10,57 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import Comments from "@/components/Comments";
 import AddComment from "@/components/AddComment";
+import loadingImg from "@/assets/loading-gear.svg";
+import { Comment } from "@/types/request";
+
 const FeedbackDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { user } = useSelector((state: RootState) => {
     return state.User;
   });
+  const [comments, setComments] = useState<Comment[]>([]);
 
   const { data: feedback, loading: isFeedbackLoading } = useAsync(
     () => getFeedbackById(id!),
     {
       immediate: true,
+      onSuccess: (response) => {
+        setComments(response.comments);
+      },
     }
   );
   const isAuthor = user?.uid === feedback?.authorId;
-
+  if (isFeedbackLoading) {
+    return (
+      <Loading>
+        <img src={loadingImg} alt="Loading" />
+      </Loading>
+    );
+  }
   return (
-    <DetailContainer>
-      <DetailHeader>
-        <Breadcrumb />
-        {isAuthor && <EditButton />}
-      </DetailHeader>
-      {feedback && <Feedback feedback={feedback} isSingle />}
-      {feedback && <Comments feedback={feedback} />}
-      <AddComment />
-    </DetailContainer>
+    feedback && (
+      <DetailContainer>
+        <DetailHeader>
+          <Breadcrumb />
+          {isAuthor && <EditButton />}
+        </DetailHeader>
+        <Feedback feedback={feedback} isSingle />
+        <Comments comments={comments} setComments={setComments} />
+        <AddComment feedbackId={id!} setComments={setComments} />
+      </DetailContainer>
+    )
   );
 };
+const Loading = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+`;
 const DetailContainer = styled.div`
   max-width: 730px;
   width: 100%;

@@ -8,6 +8,8 @@ import {
   runTransaction,
   increment,
   collection,
+  query,
+  orderBy,
 } from "firebase/firestore";
 import { Comment, SingleRequest } from "@/types/request";
 
@@ -49,7 +51,8 @@ export const getFeedbackById = async (feedbackId: string) => {
   }
   const feedbackData = feedbackDoc.data();
   const commentsRef = collection(feedbackRef, "comments");
-  const commentsSnapshot = await getDocs(commentsRef);
+  const commentsQuery = query(commentsRef, orderBy("createdAt", "asc"));
+  const commentsSnapshot = await getDocs(commentsQuery);
 
   const comments: Comment[] = [];
   commentsSnapshot.forEach((doc) => {

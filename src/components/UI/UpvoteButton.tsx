@@ -2,9 +2,9 @@
 import styled from "styled-components";
 import React, { useState, useEffect } from "react";
 import { upvoteFeedback } from "@/services/feedback";
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
-import Modal from "./Modal";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "@/redux/store";
+import { openModal } from "@/redux/slices/modalSlice";
 const UpvoteButton: React.FC<{
   vote: number;
   id: string;
@@ -13,9 +13,9 @@ const UpvoteButton: React.FC<{
   const { user } = useSelector((state: RootState) => {
     return state.User;
   });
+  const dispatch = useDispatch<AppDispatch>();
   const [upvotedUsers, setUpvotedUsers] = useState(upvotedBy);
   const [voteCount, setVoteCount] = useState(vote);
-  const [isOpen, setIsOpen] = useState(false);
   const isUpvoted = user?.uid ? upvotedUsers.includes(user.uid) : false;
   const [upvote, setUpvote] = useState(isUpvoted);
 
@@ -29,10 +29,7 @@ const UpvoteButton: React.FC<{
       }
     }
   };
-  const onClose = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsOpen(false);
-  };
+
   useEffect(() => {
     setUpvote(isUpvoted);
     setVoteCount(voteCount);
@@ -52,7 +49,7 @@ const UpvoteButton: React.FC<{
         console.error("Error upvoting feedback:", error);
       }
     } else {
-      setIsOpen(true);
+      dispatch(openModal());
     }
   };
 
@@ -71,7 +68,6 @@ const UpvoteButton: React.FC<{
         </svg>
         {voteCount}
       </Button>
-      <Modal isOpen={isOpen} onClose={onClose} />
     </>
   );
 };

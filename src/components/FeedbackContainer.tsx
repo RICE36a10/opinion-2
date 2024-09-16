@@ -61,7 +61,7 @@ const FeedbackWrapper = styled.section`
     padding: 32px 24px 48px;
   }
 `;
-const Loading = styled.div`
+export const Loading = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;

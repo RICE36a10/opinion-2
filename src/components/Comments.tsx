@@ -1,16 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 import Comment from "./Comment";
-import { SingleRequest } from "@/types/request";
+import { Comment as CommentType } from "@/types/request";
 
-const Comments: React.FC<{ feedback: SingleRequest }> = ({ feedback }) => {
-  const { comments } = feedback;
+const Comments: React.FC<{
+  comments: CommentType[];
+  setComments: React.Dispatch<React.SetStateAction<CommentType[]>>;
+}> = ({ comments, setComments }) => {
   return (
     <CommentsContainer>
       <h2 className="c-count">{comments.length} Comments</h2>
       <CommentsWrapper>
         {comments.map((comment) => (
-          <Comment comment={comment} />
+          <Comment comment={comment} setComments={setComments} />
         ))}
       </CommentsWrapper>
     </CommentsContainer>
@@ -19,7 +21,10 @@ const Comments: React.FC<{ feedback: SingleRequest }> = ({ feedback }) => {
 const CommentsContainer = styled.section`
   border-radius: var(--border-radius);
   background: var(--primary-color);
-  padding: 32px 24px;
+  padding: 24px 34px 40px;
+  @media (max-width: 767.98px) {
+    padding: 24px;
+  }
   .c-count {
     font-weight: bold;
     font-size: var(--h3-size);
@@ -27,6 +32,9 @@ const CommentsContainer = styled.section`
     letter-spacing: var(--h3-spacing);
     color: var(--text-primary);
     margin-bottom: 28px;
+    @media (max-width: 767.98px) {
+      margin-bottom: 24px;
+    }
   }
 `;
 const CommentsWrapper = styled.div``;

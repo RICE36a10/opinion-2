@@ -1,5 +1,5 @@
 import { User } from "./user";
-
+import { Timestamp } from "firebase/firestore";
 export interface Reply {
   id?: string;
   content: string;
@@ -10,13 +10,16 @@ export interface Comment {
   id: string;
   content: string;
   user: User;
+  createdAt: Timestamp;
   replies?: Reply[];
 }
 export interface CommentBaseProps {
   user: User;
   content: string;
+  id?: string;
   children?: React.ReactNode;
   replyingTo?: string;
+  setComments?: React.Dispatch<React.SetStateAction<Comment[]>>;
 }
 export interface Request {
   id: string;

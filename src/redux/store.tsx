@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./slices/userSlice";
 import filterReducer from "./slices/filterSlice";
 import feedbackReducer from "./slices/feedbackSlice";
-// import feedbackReducer from "./slices/feedbackSlice";
+import modalReducer from "./slices/modalSlice";
 import storage from "redux-persist/lib/storage";
 import { persistReducer } from "redux-persist";
 import persistStore from "redux-persist/es/persistStore";
@@ -24,6 +24,7 @@ export const store = configureStore({
     User: persistedUser,
     Filter: filterReducer,
     Feedback: feedbackReducer,
+    Modal: modalReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

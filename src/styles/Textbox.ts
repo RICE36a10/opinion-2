@@ -18,8 +18,11 @@ export const Textbox = styled.textarea<{ isError: boolean }>`
   &::placeholder {
     color: #8c92b3;
   }
-  &:hover,
   &:focus {
-    ${({ isError }) => (isError ? `var(--error-color)` : `var(--link-color)`)};
+    border: 1px solid
+      ${({ isError }) => (isError ? `var(--error-color)` : `var(--link-color)`)};
+  }
+  @media (max-width: 767.98px) {
+    padding: 16px;
   }
 `;

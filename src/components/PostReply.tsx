@@ -29,7 +29,7 @@ const PostReply: React.FC<{
           value={replyContent}
           isError={isError}
         />
-        {isError && <ErrorMessage>Reply content can't be empty</ErrorMessage>}
+        {isError && <ErrorMessage>Reply can't be empty</ErrorMessage>}
       </InputWrapper>
 
       <SubmitBtn type="submit">Post Reply</SubmitBtn>
@@ -41,20 +41,31 @@ const ReplyForm = styled.form`
   align-items: flex-start;
   margin-top: 24px;
   gap: 16px;
+  @media (max-width: 767.68px) {
+    flex-direction: column;
+    align-items: flex-end;
+  }
 `;
-const InputWrapper = styled.div`
+export const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
   flex: 1;
+  @media (max-width: 767.98px) {
+    width: 100%;
+  }
 `;
-const SubmitBtn = styled(CommonButton)`
+export const SubmitBtn = styled(CommonButton)`
   background: var(--button-color);
   &:hover {
     background: #c75af6;
   }
 `;
-const ErrorMessage = styled.span`
+export const ErrorMessage = styled.span`
   color: var(--error-color);
+  @media (max-width: 767.68px) {
+    font-size: var(--body3-size);
+    line-height: var(--body3-line);
+  }
 `;
 export default PostReply;

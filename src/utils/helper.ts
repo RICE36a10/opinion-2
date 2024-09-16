@@ -26,3 +26,6 @@ export const sortFeedbacks = (
       return filteredFeedbacks;
   }
 };
+export const editUserEmail = (email: string) => {
+  return email.slice(0, email.indexOf("@"));
+};

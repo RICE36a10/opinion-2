@@ -4,10 +4,15 @@ import { Button } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
-const Modal: React.FC<{
-  isOpen: boolean;
-  onClose: (e: React.MouseEvent) => void;
-}> = ({ isOpen, onClose }) => {
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "@/redux/store";
+import { closeModal } from "@/redux/slices/modalSlice";
+const Modal = () => {
+  const { isOpen } = useSelector((state: RootState) => state.Modal);
+  const dispatch = useDispatch<AppDispatch>();
+  const onClose = () => {
+    dispatch(closeModal());
+  };
   if (!isOpen) return null;
 
   return (
