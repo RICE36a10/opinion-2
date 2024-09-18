@@ -4,14 +4,22 @@ import UpvoteButton from "./UI/UpvoteButton";
 import CommentIcon from "@/assets/shared/icon-comments.svg";
 import { Request, SingleRequest } from "@/types/request";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { useEffect, useState } from "react";
 
 const Feedback: React.FC<{
   feedback: Request | SingleRequest;
   isSingle?: boolean;
 }> = ({ feedback, isSingle }) => {
+  const { comments } = useSelector((state: RootState) => state.Comment);
   const { title, description, category, commentCount, upvotes, id, upvotedBy } =
     feedback;
-  const isComments = commentCount;
+  const [commentC, setCommentC] = useState(commentCount);
+  useEffect(() => {
+    setCommentC(comments.length);
+  }, [comments]);
+  const isComments = commentC;
   const FeedbackContent = (
     <FeedbackWrapper>
       <ContentWrapper>
@@ -26,7 +34,7 @@ const Feedback: React.FC<{
       <Comment>
         <img src={CommentIcon} alt="comment" />
         <span className={!isComments ? "opacity" : ""}>
-          {isComments ? commentCount : 0}
+          {isComments ? commentC : 0}
         </span>
       </Comment>
     </FeedbackWrapper>

@@ -7,6 +7,8 @@ import {
   deleteDoc,
   updateDoc,
   arrayUnion,
+  arrayRemove,
+  getDoc,
 } from "firebase/firestore";
 export const addComment = async (
   feedbackId: string,
@@ -43,7 +45,6 @@ export const addReply = async (
   const feedbackRef = doc(db, "Feedbacks", feedbackId);
   const commentDoc = doc(feedbackRef, "comments", commentId);
   try {
-    console.log(replyData);
     const replyId = doc(collection(db, "temp")).id;
     const newReply: Reply = {
       id: replyId,
@@ -54,6 +55,27 @@ export const addReply = async (
     });
 
     return newReply;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deleteReply = async (
+  feedbackId: string,
+  commentId: string,
+  replyId: string
+) => {
+  try {
+    const commentRef = doc(db, "Feedbacks", feedbackId, "comments", commentId);
+    const commentSnap = await getDoc(commentRef);
+    const commentData = commentSnap.data();
+    const replyToDelete = commentData?.replies.find(
+      (reply: Reply) => reply.id === replyId
+    );
+    await updateDoc(commentRef, {
+      replies: arrayRemove(replyToDelete),
+    });
+    console.log("Reply deleted successfully");
   } catch (error) {
     console.error(error);
   }

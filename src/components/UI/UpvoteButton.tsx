@@ -56,14 +56,14 @@ const UpvoteButton: React.FC<{
   return (
     <>
       {" "}
-      <Button title="Vote" onClick={toggleClick} upvoteProp={upvote}>
+      <Button title="Vote" onClick={toggleClick} $upvote={upvote}>
         <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M1 6l4-4 4 4"
             stroke="#4661E6"
-            stroke-width="2"
+            strokeWidth="2"
             fill="none"
-            fill-rule="evenodd"
+            fillRule="evenodd"
           />
         </svg>
         {voteCount}
@@ -71,9 +71,8 @@ const UpvoteButton: React.FC<{
     </>
   );
 };
-const Button = styled.button<{ upvoteProp: boolean }>`
-  background: ${({ upvoteProp }) =>
-    upvoteProp ? `var(--link-color)` : `#f2f4f7`};
+const Button = styled.button<{ $upvote: boolean }>`
+  background: ${({ $upvote }) => ($upvote ? `var(--link-color)` : `#f2f4f7`)};
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -83,8 +82,8 @@ const Button = styled.button<{ upvoteProp: boolean }>`
   padding: 8px;
   height: 53px;
   min-width: 40px;
-  color: ${({ upvoteProp }) =>
-    upvoteProp ? `var(--primary-color)` : `var(--text-primary)`};
+  color: ${({ $upvote }) =>
+    $upvote ? `var(--primary-color)` : `var(--text-primary)`};
   font-weight: bold;
   font-size: var(--body3-size);
   line-height: var(--body3-line);
@@ -97,12 +96,12 @@ const Button = styled.button<{ upvoteProp: boolean }>`
     gap: 10px;
   }
   svg path {
-    stroke: ${({ upvoteProp }) =>
-      upvoteProp ? `var(--primary-color)` : `var(--link-color)`};
+    stroke: ${({ $upvote }) =>
+      $upvote ? `var(--primary-color)` : `var(--link-color)`};
   }
   &:hover {
-    ${({ upvoteProp }) =>
-      !upvoteProp &&
+    ${({ $upvote }) =>
+      !$upvote &&
       `background: var(--hover-color);
 `}
   }

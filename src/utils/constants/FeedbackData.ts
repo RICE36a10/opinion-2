@@ -1,6 +1,4 @@
-import { ProductRequest } from "@/types/productRequest";
-
-export const FeedbackData: ProductRequest[] = [
+export const FeedbackData = [
   {
     id: "1",
     title: "Add tags for solutions",

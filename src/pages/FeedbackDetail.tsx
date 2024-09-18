@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import useAsync from "@/utils/hooks/useAsync";
 import Feedback from "@/components/Feedback";
 import { getFeedbackById } from "@/services/feedback";
@@ -22,14 +21,12 @@ const FeedbackDetail = () => {
   const { comments } = useSelector((state: RootState) => {
     return state.Comment;
   });
-  console.log(comments);
   const { data: feedback, loading: isFeedbackLoading } = useAsync(
     () => getFeedbackById(id!),
     {
       immediate: true,
       onSuccess: (response) => {
         dispatch(setComments(response.comments));
-        // setComments(response.comments);
       },
     }
   );

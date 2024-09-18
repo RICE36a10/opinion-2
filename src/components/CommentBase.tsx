@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { CommentBaseProps } from "@/types/request";
+import { CommentBaseProps, Reply } from "@/types/request";
 import PostReply from "./PostReply";
 import DeleteRoundedIcon from "@mui/icons-material/DeleteRounded";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/redux/store";
 import useAsync from "@/utils/hooks/useAsync";
-import { deleteComment } from "@/services/comment";
+import { deleteComment, deleteReply } from "@/services/comment";
 import { useParams } from "react-router-dom";
 import { setComments } from "@/redux/slices/commentSlice";
 export const CommentBase: React.FC<CommentBaseProps> = ({
@@ -15,6 +15,7 @@ export const CommentBase: React.FC<CommentBaseProps> = ({
   children,
   replyingTo,
   id,
+  replyId,
 }) => {
   const [replying, setReplying] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
@@ -36,8 +37,30 @@ export const CommentBase: React.FC<CommentBaseProps> = ({
       },
     }
   );
+  const { execute: executeDeleteReply } = useAsync(
+    deleteReply as (...args: unknown[]) => Promise<Reply | undefined>,
+    {
+      onSuccess: () => {
+        const updatedComments = comments.map((comment) => {
+          if (comment.id === id) {
+            return {
+              ...comment,
+              replies: comment.replies?.filter((reply) => reply.id !== replyId),
+            };
+          }
+          return comment;
+        });
+        console.log(updatedComments);
+        dispatch(setComments(updatedComments));
+      },
+    }
+  );
   const onDelete = () => {
-    executeDeleteComment(feedbackId, id);
+    if (replyId !== undefined) {
+      executeDeleteReply(feedbackId, id, replyId);
+    } else {
+      executeDeleteComment(feedbackId, id);
+    }
   };
   const isAuth = user.uid === AuthUser?.uid;
   const Content = (

@@ -1,11 +1,11 @@
 import styled from "styled-components";
 
-export const Textbox = styled.textarea<{ isError: boolean }>`
+export const Textbox = styled.textarea<{ $isError: boolean }>`
   min-height: 80px;
   border-radius: 5px;
   background: var(--bg-main);
-  border: ${({ isError }) =>
-    isError ? `1px solid var(--error-color)` : `none`};
+  border: ${({ $isError }) =>
+    $isError ? `1px solid var(--error-color)` : `none`};
   font-weight: 400;
   font-size: var(--body2-size);
   line-height: var(--body2-line);
@@ -20,7 +20,8 @@ export const Textbox = styled.textarea<{ isError: boolean }>`
   }
   &:focus {
     border: 1px solid
-      ${({ isError }) => (isError ? `var(--error-color)` : `var(--link-color)`)};
+      ${({ $isError }) =>
+        $isError ? `var(--error-color)` : `var(--link-color)`};
   }
   @media (max-width: 767.98px) {
     padding: 16px;

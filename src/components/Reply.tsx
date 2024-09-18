@@ -6,7 +6,7 @@ const Reply: React.FC<{
   reply: ReplyType;
   commentId: string;
 }> = ({ reply, commentId }) => {
-  const { user, replyingTo, content } = reply;
+  const { user, replyingTo, content, id } = reply;
 
   return (
     <CommentBase
@@ -14,6 +14,7 @@ const Reply: React.FC<{
       user={user}
       content={content}
       id={commentId}
+      replyId={id}
     />
   );
 };

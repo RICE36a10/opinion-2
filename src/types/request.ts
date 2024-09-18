@@ -1,17 +1,16 @@
 import { User } from "./user";
-import { Timestamp } from "firebase/firestore";
 export interface Reply {
   id: string;
   content: string;
   replyingTo: string;
   user: User;
-  createdAt: Timestamp;
+  createdAt: number;
 }
 export interface Comment {
   id: string;
   content: string;
   user: User;
-  createdAt: Timestamp;
+  createdAt: number;
   replies?: Reply[];
 }
 export interface CommentBaseProps {
@@ -20,6 +19,7 @@ export interface CommentBaseProps {
   id: string;
   children?: React.ReactNode;
   replyingTo?: string;
+  replyId?: string;
 }
 export interface Request {
   id: string;

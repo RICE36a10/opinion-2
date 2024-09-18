@@ -9,7 +9,7 @@ import { RootState, AppDispatch } from "@/redux/store";
 import { editUserEmail } from "@/utils/helper";
 import { openModal } from "@/redux/slices/modalSlice";
 import { Comment } from "@/types/request";
-import { serverTimestamp, Timestamp } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
 import { addComment as addCommentAction } from "@/redux/slices/commentSlice";
 const AddComment: React.FC<{
   feedbackId: string;
@@ -38,7 +38,7 @@ const AddComment: React.FC<{
             username: editUserEmail(user.email),
             uid: user.uid,
           },
-          createdAt: serverTimestamp() as Timestamp,
+          createdAt: Timestamp.now().toMillis(),
         };
         setIsError(false);
         setCommentText("");
@@ -63,7 +63,7 @@ const AddComment: React.FC<{
             }
             placeholder="Type your comment here"
             value={commentText}
-            isError={isError}
+            $isError={isError}
             maxLength={250}
           />
           {isError && <ErrorMessage>Comment can't be empty</ErrorMessage>}

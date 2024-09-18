@@ -9,7 +9,8 @@ import { CommonButton } from "@/styles/CommonButton";
 import { Timestamp } from "firebase/firestore";
 import styled from "styled-components";
 import { addReply } from "@/services/comment";
-import { Comment } from "@/types/request";
+import { Reply } from "@/types/request";
+import { setComments } from "@/redux/slices/commentSlice";
 const PostReply: React.FC<{
   setReplying: React.Dispatch<React.SetStateAction<boolean>>;
   replyingTo: string;
@@ -20,11 +21,24 @@ const PostReply: React.FC<{
   const [isError, setIsError] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.User);
+  const { comments } = useSelector((state: RootState) => state.Comment);
   const { execute: executeAddReply } = useAsync(
-    addReply as (...args: unknown[]) => Promise<Comment | undefined>,
+    addReply as (...args: unknown[]) => Promise<Reply | undefined>,
     {
       onSuccess: (response) => {
-        // setComments((prev) => [...prev, response as Comment]);
+        const updatedComments = comments.map((comment) => {
+          if (comment.id === commentId) {
+            return {
+              ...comment,
+              replies: comment.replies
+                ? [...comment.replies, response!]
+                : [response!],
+            };
+          }
+          return comment;
+        });
+
+        dispatch(setComments(updatedComments));
       },
     }
   );
@@ -42,7 +56,7 @@ const PostReply: React.FC<{
             uid: user.uid,
           },
           replyingTo: replyingTo,
-          createdAt: Timestamp.now(),
+          createdAt: Timestamp.now().toMillis(),
         };
         setReplying(false);
         setIsError(false);
@@ -64,7 +78,7 @@ const PostReply: React.FC<{
           }
           placeholder="Type your reply here"
           value={replyContent}
-          isError={isError}
+          $isError={isError}
         />
         {isError && <ErrorMessage>Reply can't be empty</ErrorMessage>}
       </InputWrapper>
