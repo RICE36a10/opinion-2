@@ -1,4 +1,4 @@
-import { sortByOrder, Request } from "@/types/request";
+import { sortByOrder, Request, Status } from "@/types/request";
 
 export const sortFeedbacks = (
   feedbacks: Request[],
@@ -28,4 +28,19 @@ export const sortFeedbacks = (
 };
 export const editUserEmail = (email: string) => {
   return email.slice(0, email.indexOf("@"));
+};
+export const countByStatus = (status: Status, feedbacks: Request[]) => {
+  switch (status) {
+    case Status.Planned:
+      return feedbacks.filter((feedback) => feedback.status === Status.Planned)
+        .length;
+    case Status.Progress:
+      return feedbacks.filter((feedback) => feedback.status === Status.Progress)
+        .length;
+    case Status.Live:
+      return feedbacks.filter((feedback) => feedback.status === Status.Live)
+        .length;
+    default:
+      return 0;
+  }
 };

@@ -3,6 +3,31 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import { setFilterByCategory } from "@/redux/slices/filterSlice";
+
+const CategoryFilter = () => {
+  const { filterByCategory: selectedCategory } = useSelector(
+    (state: RootState) => state.Filter
+  );
+  const dispatch = useDispatch<AppDispatch>();
+
+  return (
+    <CategoryWrapper>
+      {Categories.map((category, index) => (
+        <CategoryItem
+          key={index}
+          type="button"
+          selected={selectedCategory === category.toLocaleLowerCase()}
+          onClick={() => {
+            dispatch(setFilterByCategory(category.toLowerCase()));
+          }}
+        >
+          {category}
+        </CategoryItem>
+      ))}
+    </CategoryWrapper>
+  );
+};
+
 interface CategoryItemProps {
   selected: boolean;
 }
@@ -33,28 +58,4 @@ const CategoryItem = styled.button<CategoryItemProps>`
     ${({ selected }) => !selected && ` background: var(--hover-color)`}
   }
 `;
-const CategoryFilter = () => {
-  const { filterByCategory: selectedCategory } = useSelector(
-    (state: RootState) => state.Filter
-  );
-  const dispatch = useDispatch<AppDispatch>();
-
-  return (
-    <CategoryWrapper>
-      {Categories.map((category, index) => (
-        <CategoryItem
-          key={index}
-          type="button"
-          selected={selectedCategory === category.toLocaleLowerCase()}
-          onClick={() => {
-            dispatch(setFilterByCategory(category.toLowerCase()));
-          }}
-        >
-          {category}
-        </CategoryItem>
-      ))}
-    </CategoryWrapper>
-  );
-};
-
 export default CategoryFilter;

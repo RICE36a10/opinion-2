@@ -1,4 +1,36 @@
 import styled from "styled-components";
+import { useSelector } from "react-redux";
+import { RootState } from "@/redux/store";
+import { countByStatus } from "@/utils/helper";
+import { Status } from "@/types/request";
+const Roadmap = () => {
+  const { feedbackData } = useSelector((state: RootState) => state.Feedback);
+  const plannedCount = countByStatus(Status.Planned, feedbackData);
+  const progressCount = countByStatus(Status.Progress, feedbackData);
+  const liveCount = countByStatus(Status.Live, feedbackData);
+  const statuses = [
+    { label: "Planned", count: plannedCount, color: "#f49f85" },
+    { label: "In-Progress", count: progressCount, color: "#ad1fea" },
+    { label: "Live", count: liveCount, color: "#62bcfa" },
+  ];
+  return (
+    <RoadmapWrapper>
+      <StatusHeader>
+        <h3>Roadmap</h3>
+        <a href="">View</a>
+      </StatusHeader>
+      <StatusBody>
+        {statuses.map((status) => (
+          <StatusItem key={status.label}>
+            <StatusDot color={status.color} />
+            {status.label}
+            <span className="count">{status.count}</span>
+          </StatusItem>
+        ))}
+      </StatusBody>
+    </RoadmapWrapper>
+  );
+};
 const RoadmapWrapper = styled.div`
   border-radius: var(--border-radius);
   background: var(--primary-color);
@@ -53,29 +85,4 @@ const StatusDot = styled.span`
   margin-right: 16px;
   background-color: ${({ color }) => color};
 `;
-const Roadmap = () => {
-  const statuses = [
-    { label: "Planned", count: 2, color: "#f49f85" },
-    { label: "In-Progress", count: 2, color: "#ad1fea" },
-    { label: "Live", count: 2, color: "#62bcfa" },
-  ];
-  return (
-    <RoadmapWrapper>
-      <StatusHeader>
-        <h3>Roadmap</h3>
-        <a href="">View</a>
-      </StatusHeader>
-      <StatusBody>
-        {statuses.map((status) => (
-          <StatusItem key={status.label}>
-            <StatusDot color={status.color} />
-            {status.label}
-            <span className="count">{status.count}</span>
-          </StatusItem>
-        ))}
-      </StatusBody>
-    </RoadmapWrapper>
-  );
-};
-
 export default Roadmap;

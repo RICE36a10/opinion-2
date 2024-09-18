@@ -31,15 +31,17 @@ const FeedbackContainer = () => {
         </Loading>
       );
     }
-    if (feedbackData?.length === 0) {
-      return <NotFound />;
-    }
+
     if (feedbackData) {
       const filteredData = feedbackData.filter(
         (feedback) => feedback.status === "suggestion"
       );
       sortedFeedbacks = sortFeedbacks(filteredData, sortBy.id, category);
     }
+    if (sortedFeedbacks?.length === 0) {
+      return <NotFound />;
+    }
+    console.log(sortedFeedbacks);
     return sortedFeedbacks?.map((feedback: Request) => (
       <Feedback key={feedback.id} feedback={feedback} />
     ));

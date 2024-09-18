@@ -24,7 +24,7 @@ export const CommentBase: React.FC<CommentBaseProps> = ({
   });
   const { comments } = useSelector((state: RootState) => state.Comment);
   const { id: feedbackId } = useParams<{ id: string }>();
-
+  const childrenArray = React.Children.toArray(children);
   const onReply = () => {
     setReplying((prev) => !prev);
   };
@@ -62,6 +62,7 @@ export const CommentBase: React.FC<CommentBaseProps> = ({
       executeDeleteComment(feedbackId, id);
     }
   };
+
   const isAuth = user.uid === AuthUser?.uid;
   const Content = (
     <>
@@ -95,7 +96,9 @@ export const CommentBase: React.FC<CommentBaseProps> = ({
             feedbackId={feedbackId!}
           />
         )}
-        {children && <ReplyContainer>{children}</ReplyContainer>}
+        {childrenArray.length > 0 && (
+          <ReplyContainer>{children}</ReplyContainer>
+        )}
       </CommentContent>
     </>
   );

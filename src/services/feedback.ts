@@ -22,7 +22,7 @@ export const upvoteFeedback = async (feedbackId: string, userId: string) => {
         throw new Error("Feedback not found");
       }
 
-      const upvotedBy = feedbackDoc.data()!.upvotedBy;
+      const upvotedBy = feedbackDoc.data()!.upvotedBy || [];
       const hasUpvoted = upvotedBy.includes(userId);
 
       transaction.update(feedbackRef, {

@@ -74,7 +74,7 @@ const Container = styled.div`
   max-width: 1158px;
   width: 100%;
   margin: 0 auto;
-  padding: 50px 24px 0;
+  padding: 50px 24px 100px;
   display: flex;
   gap: 30px;
   @media (max-width: 1024px) {

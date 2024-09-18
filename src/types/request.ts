@@ -52,3 +52,9 @@ export interface FilterState {
   sortBy: { name: string; id: sortByOrder };
   filterByCategory: string;
 }
+export const enum Status {
+  Planned = "planned",
+  Progress = "in-progress",
+  Live = "live",
+  Suggestion = "suggestion",
+}

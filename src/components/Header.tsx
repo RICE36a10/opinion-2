@@ -7,6 +7,7 @@ import LogIn from "./LogIn";
 import LogOut from "./LogOut";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import { Status } from "@/types/request";
 const StyledHeader = styled.header`
   display: flex;
   align-items: center;
@@ -44,10 +45,16 @@ const Header: React.FC<{
   const { feedbackData } = useSelector((state: RootState) => {
     return state.Feedback;
   });
+  const { filterByCategory } = useSelector((state: RootState) => {
+    return state.Filter;
+  });
 
   const suggestionCount =
-    feedbackData &&
-    feedbackData.filter((feedback) => feedback.status === "suggestion").length;
+    feedbackData?.filter(
+      (feedback) =>
+        feedback.status === Status.Suggestion &&
+        (filterByCategory === "all" || feedback.category === filterByCategory)
+    ).length ?? 0;
 
   return (
     <StyledHeader>

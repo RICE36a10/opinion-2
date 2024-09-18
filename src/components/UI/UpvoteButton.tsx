@@ -14,9 +14,9 @@ const UpvoteButton: React.FC<{
     return state.User;
   });
   const dispatch = useDispatch<AppDispatch>();
-  const [upvotedUsers, setUpvotedUsers] = useState(upvotedBy);
+  const [upvotedUsers, setUpvotedUsers] = useState(upvotedBy ? upvotedBy : []);
   const [voteCount, setVoteCount] = useState(vote);
-  const isUpvoted = user?.uid ? upvotedUsers.includes(user.uid) : false;
+  const isUpvoted = user?.uid ? upvotedUsers?.includes(user.uid) : false;
   const [upvote, setUpvote] = useState(isUpvoted);
 
   const updateUpvotedUsers = (flag: boolean) => {

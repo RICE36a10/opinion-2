@@ -19,7 +19,7 @@ const Feedback: React.FC<{
   useEffect(() => {
     setCommentC(comments.length);
   }, [comments]);
-  const isComments = commentC;
+  const isComments = isSingle ? commentC : commentCount;
   const FeedbackContent = (
     <FeedbackWrapper>
       <ContentWrapper>
@@ -34,7 +34,7 @@ const Feedback: React.FC<{
       <Comment>
         <img src={CommentIcon} alt="comment" />
         <span className={!isComments ? "opacity" : ""}>
-          {isComments ? commentC : 0}
+          {!isComments ? 0 : isSingle ? commentC : commentCount}
         </span>
       </Comment>
     </FeedbackWrapper>
