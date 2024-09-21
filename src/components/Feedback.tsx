@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useEffect, useState } from "react";
+import { Categories } from "@/utils/constants/Categories";
 
 const Feedback: React.FC<{
   feedback: Request | SingleRequest;
@@ -16,6 +17,10 @@ const Feedback: React.FC<{
   const { title, description, category, commentCount, upvotes, id, upvotedBy } =
     feedback;
   const [commentC, setCommentC] = useState(commentCount);
+  const categoryName = Categories.filter(
+    (cat) => cat.toLowerCase() === category
+  )[0];
+
   useEffect(() => {
     setCommentC(comments.length);
   }, [comments]);
@@ -27,7 +32,7 @@ const Feedback: React.FC<{
         <Content>
           <h3>{title}</h3>
           <p>{description}</p>
-          <span>{category}</span>
+          <span>{categoryName}</span>
         </Content>
       </ContentWrapper>
 
@@ -42,7 +47,7 @@ const Feedback: React.FC<{
   return isSingle ? (
     FeedbackContent
   ) : (
-    <Link to={`/feedbacks/${id}`}>{FeedbackContent}</Link>
+    <Link to={`/feedback/${id}`}>{FeedbackContent}</Link>
   );
 };
 

@@ -1,3 +1,4 @@
 import Home from "./Home";
 import FeedbackDetail from "./FeedbackDetail";
-export { Home, FeedbackDetail };
+import AddFeedback from "./AddFeedback";
+export { Home, FeedbackDetail, AddFeedback };

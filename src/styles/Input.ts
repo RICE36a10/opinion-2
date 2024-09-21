@@ -1,17 +1,13 @@
 import styled from "styled-components";
 import { CommonInputStyle } from "./CommonInput";
-export const Textbox = styled.textarea<{ $isError: boolean }>`
+export const Input = styled.input<{ $isError: boolean }>`
   ${CommonInputStyle}
-  min-height: 80px;
+  min-height: 48px;
+  width: 100%;
   border: ${({ $isError }) =>
     $isError ? `1px solid var(--error-color)` : `none`};
 
-  padding: 16px 24px;
-  flex: 1;
-  resize: none;
-  &::placeholder {
-    color: #8c92b3;
-  }
+  padding: 12px 24px;
   &:focus {
     border: 1px solid
       ${({ $isError }) =>

@@ -10,8 +10,11 @@ import {
   collection,
   query,
   orderBy,
+  Timestamp,
+  addDoc,
 } from "firebase/firestore";
 import { Comment, SingleRequest } from "@/types/request";
+import { FormData } from "@/components/FeedbackForm";
 
 export const upvoteFeedback = async (feedbackId: string, userId: string) => {
   const feedbackRef = doc(db, "Feedbacks", feedbackId);
@@ -67,4 +70,25 @@ export const getFeedbackById = async (feedbackId: string) => {
     comments,
     commentCount: comments.length,
   } as SingleRequest;
+};
+
+export const addFeedback = async (formData: FormData) => {
+  const { category } = formData;
+  const feedbackRef = collection(db, "Feedbacks");
+  const newFeedback = {
+    ...formData,
+    category: category.name.toLowerCase(),
+    status: "suggestion",
+    createdAt: Timestamp.now().toMillis(),
+    upvotes: 0,
+  };
+  try {
+    const newFeedbackRef = await addDoc(feedbackRef, newFeedback);
+    return {
+      id: newFeedbackRef.id,
+      ...newFeedback,
+    };
+  } catch (error) {
+    console.error(error);
+  }
 };
