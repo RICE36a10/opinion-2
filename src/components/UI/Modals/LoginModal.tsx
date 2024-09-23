@@ -1,4 +1,4 @@
-import LogIn from "../LogIn";
+import LogIn from "@/components/LogIn";
 import CloseIcon from "@mui/icons-material/Close";
 import { Button } from "@mui/material";
 import Dialog from "@mui/material/Dialog";
@@ -7,7 +7,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/redux/store";
 import { closeModal } from "@/redux/slices/modalSlice";
-const Modal = () => {
+const LoginModal = () => {
   const { isOpen } = useSelector((state: RootState) => state.Modal);
   const dispatch = useDispatch<AppDispatch>();
   const onClose = () => {
@@ -46,4 +46,4 @@ const Modal = () => {
   );
 };
 
-export default Modal;
+export default LoginModal;

@@ -9,9 +9,9 @@ interface DropdownProps {
   options: { name: string; id?: string }[];
   closeDropdown: () => void;
   selectedOption: { name: string; id?: string };
-  type: string;
+  type?: string;
   isCategory?: boolean;
-  setSelectedCategory?: React.Dispatch<
+  onSelect?: React.Dispatch<
     React.SetStateAction<{
       name: string;
     }>
@@ -23,24 +23,27 @@ const Dropdown: React.FC<DropdownProps> = ({
   closeDropdown,
   selectedOption,
   type,
-  setSelectedCategory,
+  onSelect,
   isCategory,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
-
+  const handleClick = (option: { name: string; id?: string }) => {
+    closeDropdown();
+    if (type === "sortByOrder") {
+      dispatch(setSortBy(option));
+    } else {
+      if (onSelect) {
+        onSelect(option);
+      }
+    }
+  };
   return (
     <DropdownWrapper $isCategory={isCategory ? isCategory : false}>
       {options.map((option) => (
         <Option
           key={option.id || option.name}
           onClick={() => {
-            closeDropdown();
-            if (type === "sortByOrder") {
-              dispatch(setSortBy(option));
-            }
-            if (type === "selectCategory") {
-              setSelectedCategory!(option);
-            }
+            handleClick(option);
           }}
         >
           {option.name}
@@ -61,6 +64,7 @@ const DropdownWrapper = styled.div<{ $isCategory: boolean }>`
   border-radius: var(--border-radius);
   background: var(--primary-color);
   box-shadow: var(--box-shadow);
+  z-index: 99;
   width: 100%;
   ${({ $isCategory }) => {
     return (

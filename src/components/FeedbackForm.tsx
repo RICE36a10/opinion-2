@@ -3,41 +3,67 @@ import styled from "styled-components";
 import Breadcrumb from "./UI/Breadcrumb";
 import { useLocation, useNavigate } from "react-router-dom";
 import addLogo from "@/assets/shared/icon-new-feedback.svg";
+import editLogo from "@/assets/shared/icon-edit-feedback.svg";
 import { Input } from "@/styles/Input";
 import ArrowUp from "@/assets/shared/icon-arrow-up.svg";
 import ArrowDown from "@/assets/shared/icon-arrow-down.svg";
 import Dropdown from "./UI/Dropdown";
 import { CommonInputStyle } from "@/styles/CommonInput";
-import { categoryOptions } from "@/utils/constants/Options";
+import { categoryOptions, statusOptions } from "@/utils/constants/Options";
 import { Textbox } from "@/styles/Textbox";
-import { CommonButton } from "@/styles/CommonButton";
+import { CommonButton, DeleteBtn, CancelBtn } from "@/styles/CommonButton";
 import { Link } from "react-router-dom";
 import { ErrorMessage } from "./PostReply";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { addFeedback } from "@/services/feedback";
+import { addFeedback, deleteFeedback } from "@/services/feedback";
+import { SingleRequest } from "@/types/request";
+import DeleteConfirmationModal from "./UI/Modals/DeleteModal";
 export interface FormData {
   title: string;
   description: string;
   category: { name: string };
   authorId: string;
+  status: { name: string };
 }
 interface FormErrors {
   title: string;
   description: string;
 }
-const FeedbackForm = () => {
+const FeedbackForm: React.FC<{
+  edit?: boolean;
+  path?: string;
+  feedback?: SingleRequest;
+}> = ({ edit, path, feedback }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user } = useSelector((state: RootState) => state.User);
   const urlVal = location.state?.from !== "/";
-  const [isOpen, setIsOpen] = useState(false);
+
+  const [isCategoryOpen, setIsCategoryOpen] = useState(false);
+  const [isStatusOpen, setIsStatusOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const initialCategory = edit
+    ? (categoryOptions.find(
+        (option) => option.name.toLowerCase() === feedback!.category
+      ) as { name: string })
+    : categoryOptions[0];
+
+  const initialStatus = edit
+    ? (statusOptions.find(
+        (option) => option.name.toLowerCase() === feedback?.status
+      ) as { name: string })
+    : statusOptions[0];
+
   const [formData, setFormData] = useState<FormData>({
-    title: "",
-    description: "",
-    category: categoryOptions[0],
+    title: edit ? feedback!.title : "",
+    description: edit ? feedback!.description : "",
+    category: initialCategory,
     authorId: user!.uid,
+    status: initialStatus,
   });
+
   const [errors, setErrors] = useState<FormErrors>({
     title: "",
     description: "",
@@ -57,12 +83,14 @@ const FeedbackForm = () => {
     setErrors((prev) => ({ ...prev, [name]: validateField(name, value) }));
   };
 
-  const handleCategoryChange = (category: { name: string }) => {
-    setFormData((prev) => ({ ...prev, category }));
-  };
-
-  const onToggle = () => {
-    setIsOpen((prev) => !prev);
+  const handleDropdownChange =
+    (key: "category" | "status") => (option: { name: string }) => {
+      setFormData((prev) => ({ ...prev, [key]: option }));
+    };
+  const toggleDropdown = (key: "Category" | "Status") => () => {
+    key === "Category"
+      ? setIsCategoryOpen((prev) => !prev)
+      : setIsStatusOpen((prev) => !prev);
   };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -79,78 +107,138 @@ const FeedbackForm = () => {
       navigate("/");
     }
   };
+  const onDelete = () => {
+    if (feedback) {
+      deleteFeedback(feedback.id);
+      navigate("/");
+    }
+  };
   return (
-    <FormWrapper>
-      <Breadcrumb url={urlVal && location.state?.from} />
-      <Form onSubmit={onSubmit}>
-        <AddLogo>
-          <img src={addLogo} alt="Add logo" />
-        </AddLogo>
-        <Title>Create New Feedback</Title>
+    <>
+      <FormWrapper>
+        <Breadcrumb url={edit ? path : urlVal && location.state?.from} />
+        <Form onSubmit={onSubmit}>
+          <AddLogo>
+            {edit ? (
+              <img src={editLogo} alt="Edit logo" />
+            ) : (
+              <img src={addLogo} alt="Add logo" />
+            )}
+          </AddLogo>
+          <Title>
+            {edit ? `Editing ‘${feedback!.title}’` : "Create New Feedback"}
+          </Title>
 
-        <FormBody>
-          <FormGroup>
-            <Label htmlFor="title">Feedback Title</Label>
-            <Description>Add a short, descriptive headline</Description>
-            <Input
-              $isError={!!errors.title}
-              type="text"
-              id="title"
-              name="title"
-              onChange={handleChange}
-              value={formData.title}
-            />
-            {!!errors.title && <ErrorMessage>{errors.title}</ErrorMessage>}
-          </FormGroup>
-          <FormGroup style={{ position: "relative" }}>
-            <Label htmlFor="category">Category</Label>
-            <Description>Choose a category for your feedback</Description>
-            <SelectButton type="button" onClick={onToggle}>
-              {formData.category.name}
-              {isOpen ? (
-                <img src={ArrowUp} alt="Arrow icon" />
-              ) : (
-                <img src={ArrowDown} alt="Arrow icon" />
-              )}
-            </SelectButton>
-            {isOpen && (
-              <Dropdown
-                options={categoryOptions}
-                selectedOption={formData.category}
-                type="selectCategory"
-                closeDropdown={() => setIsOpen(false)}
-                setSelectedCategory={handleCategoryChange}
-                isCategory
+          <FormBody>
+            <FormGroup>
+              <Label htmlFor="title">Feedback Title</Label>
+              <Description>Add a short, descriptive headline</Description>
+              <Input
+                $isError={!!errors.title}
+                type="text"
+                id="title"
+                name="title"
+                onChange={handleChange}
+                value={formData.title}
               />
+              {!!errors.title && <ErrorMessage>{errors.title}</ErrorMessage>}
+            </FormGroup>
+            <FormGroup style={{ position: "relative" }}>
+              <Label htmlFor="category">Category</Label>
+              <Description>Choose a category for your feedback</Description>
+              <SelectButton type="button" onClick={toggleDropdown("Category")}>
+                {formData.category.name}
+                {isCategoryOpen ? (
+                  <img src={ArrowUp} alt="Arrow icon" />
+                ) : (
+                  <img src={ArrowDown} alt="Arrow icon" />
+                )}
+              </SelectButton>
+              {isCategoryOpen && (
+                <Dropdown
+                  options={categoryOptions}
+                  selectedOption={formData.category}
+                  closeDropdown={() => setIsCategoryOpen(false)}
+                  onSelect={handleDropdownChange("category")}
+                  isCategory
+                />
+              )}
+            </FormGroup>
+            {edit && (
+              <FormGroup style={{ position: "relative" }}>
+                <Label htmlFor="status">Update Status</Label>
+                <Description>Change feedback state</Description>
+                <SelectButton type="button" onClick={toggleDropdown("Status")}>
+                  {formData.status.name}
+                  {isStatusOpen ? (
+                    <img src={ArrowUp} alt="Arrow icon" />
+                  ) : (
+                    <img src={ArrowDown} alt="Arrow icon" />
+                  )}
+                </SelectButton>
+                {isStatusOpen && (
+                  <Dropdown
+                    options={statusOptions}
+                    selectedOption={formData.status}
+                    closeDropdown={() => setIsStatusOpen(false)}
+                    onSelect={handleDropdownChange("status")}
+                    isCategory
+                  />
+                )}
+              </FormGroup>
             )}
-          </FormGroup>
-          <FormGroup>
-            <Label htmlFor="detail">Feedback Detail</Label>
-            <Description>
-              Include any specific comments on what should be improved, added,
-              etc.
-            </Description>
-            <Textbox
-              $isError={!!errors.description}
-              value={formData.description}
-              onChange={handleChange}
-              name="description"
-            />
-            {!!errors.description && (
-              <ErrorMessage>{errors.description}</ErrorMessage>
+
+            <FormGroup>
+              <Label htmlFor="detail">Feedback Detail</Label>
+              <Description>
+                Include any specific comments on what should be improved, added,
+                etc.
+              </Description>
+              <Textbox
+                $isError={!!errors.description}
+                value={formData.description}
+                onChange={handleChange}
+                name="description"
+              />
+              {!!errors.description && (
+                <ErrorMessage>{errors.description}</ErrorMessage>
+              )}
+            </FormGroup>
+          </FormBody>
+
+          <FormFooter>
+            {edit && (
+              <DeleteBtn
+                type="button"
+                onClick={() => {
+                  if (setIsModalOpen) {
+                    setIsModalOpen(true);
+                  }
+                }}
+              >
+                Delete
+              </DeleteBtn>
             )}
-          </FormGroup>
-        </FormBody>
+            <Link
+              to={
+                edit ? `${window.location.origin}${path}` : location.state?.from
+              }
+            >
+              <CancelBtn type="button">Cancel</CancelBtn>
+            </Link>
 
-        <FormFooter>
-          <Link to={location.state?.from}>
-            <CancelBtn type="button">Cancel</CancelBtn>
-          </Link>
-
-          <AddBtn type="submit">Add feedback</AddBtn>
-        </FormFooter>
-      </Form>
-    </FormWrapper>
+            <AddBtn type="submit">
+              {edit ? "Save Changes" : "Add Feedback"}
+            </AddBtn>
+          </FormFooter>
+        </Form>
+      </FormWrapper>
+      <DeleteConfirmationModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onDelete={onDelete}
+      />
+    </>
   );
 };
 
@@ -290,13 +378,5 @@ const AddBtn = styled(CommonButton)`
     margin-left: 0;
   }
 `;
-const CancelBtn = styled(CommonButton)`
-  background: #3a4374;
-  &:hover {
-    background: #656ea3;
-  }
-  @media (max-width: 767.98px) {
-    width: 100%;
-  }
-`;
+
 export default FeedbackForm;

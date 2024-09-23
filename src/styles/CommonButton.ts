@@ -15,3 +15,23 @@ export const CommonButton = styled.button`
     padding: 10px 16px;
   }
 `;
+
+export const DeleteBtn = styled(CommonButton)`
+  background: #d73737;
+  margin-right: auto;
+  &:hover {
+    background: #e98888;
+  }
+  @media (max-width: 767.98px) {
+    width: 100%;
+  }
+`;
+export const CancelBtn = styled(CommonButton)`
+  background: #3a4374;
+  &:hover {
+    background: #656ea3;
+  }
+  @media (max-width: 767.98px) {
+    width: 100%;
+  }
+`;

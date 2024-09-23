@@ -12,6 +12,7 @@ import {
   orderBy,
   Timestamp,
   addDoc,
+  deleteDoc,
 } from "firebase/firestore";
 import { Comment, SingleRequest } from "@/types/request";
 import { FormData } from "@/components/FeedbackForm";
@@ -73,12 +74,12 @@ export const getFeedbackById = async (feedbackId: string) => {
 };
 
 export const addFeedback = async (formData: FormData) => {
-  const { category } = formData;
+  const { category, status } = formData;
   const feedbackRef = collection(db, "Feedbacks");
   const newFeedback = {
     ...formData,
     category: category.name.toLowerCase(),
-    status: "suggestion",
+    status: status.name.toLowerCase(),
     createdAt: Timestamp.now().toMillis(),
     upvotes: 0,
   };
@@ -88,6 +89,16 @@ export const addFeedback = async (formData: FormData) => {
       id: newFeedbackRef.id,
       ...newFeedback,
     };
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const deleteFeedback = async (feedbackId: string) => {
+  const feedbackRef = doc(db, "Feedbacks", feedbackId);
+  try {
+    await deleteDoc(feedbackRef);
+    return "Feedback is deleted";
   } catch (error) {
     console.error(error);
   }

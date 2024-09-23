@@ -52,7 +52,7 @@ const PostReply: React.FC<{
           user: {
             image: user.photoURL,
             name: user.displayName,
-            username: editUserEmail(user.email),
+            username: editUserEmail(user.email!),
             uid: user.uid,
           },
           replyingTo: replyingTo,

@@ -43,7 +43,7 @@ const FeedbackDetail = () => {
       <DetailContainer>
         <DetailHeader>
           <Breadcrumb />
-          {isAuthor && <EditButton />}
+          {isAuthor && <EditButton feedback={feedback} />}
         </DetailHeader>
         <Feedback feedback={feedback} isSingle />
         <Comments comments={comments} />

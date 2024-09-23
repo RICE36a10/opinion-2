@@ -47,7 +47,7 @@ const Feedback: React.FC<{
   return isSingle ? (
     FeedbackContent
   ) : (
-    <Link to={`/feedback/${id}`}>{FeedbackContent}</Link>
+    <Link to={`/feedbacks/${id}`}>{FeedbackContent}</Link>
   );
 };
 

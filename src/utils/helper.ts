@@ -44,10 +44,3 @@ export const countByStatus = (status: Status, feedbacks: Request[]) => {
       return 0;
   }
 };
-
-export const scrollRestoration = () => ({
-  preventScrollReset: false,
-  scrollToTop: () => {
-    window.scrollTo(0, 0);
-  },
-});

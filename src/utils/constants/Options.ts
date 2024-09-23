@@ -25,3 +25,18 @@ export const categoryOptions = [
     name: "Bug",
   },
 ];
+export const statusOptions = [
+  {
+    name: "Suggestion",
+  },
+  {
+    name: "Planned",
+  },
+
+  {
+    name: "In-progress",
+  },
+  {
+    name: "Live",
+  },
+];

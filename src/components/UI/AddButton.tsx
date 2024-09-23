@@ -10,7 +10,7 @@ const Button = styled(CommonButton)`
 const AddButton = () => {
   const location = useLocation();
   return (
-    <Link to="/feedback/add" state={{ from: location.pathname }}>
+    <Link to="/feedbacks/add" state={{ from: location.pathname }}>
       <Button title="Add Feedback">+ Add Feedback</Button>
     </Link>
   );

@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import leftArrow from "@/assets/shared/icon-arrow-left.svg";
 const Breadcrumb: React.FC<{ url?: string }> = ({ url }) => {
+  const directUrl = url ? `${window.location.origin}${url}` : "/";
   return (
     <Wrapper>
       <img src={leftArrow} alt="Left Arrow" />
-      <Link to={`/${url ? url : ""}`}>Go Back</Link>
+      <Link to={directUrl}>Go Back</Link>
     </Wrapper>
   );
 };

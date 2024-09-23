@@ -1,18 +1,39 @@
 import { createBrowserRouter } from "react-router-dom";
-import { Home, FeedbackDetail, AddFeedback } from "../pages/index";
-import { scrollRestoration } from "@/utils/helper";
+import {
+  Home,
+  FeedbackDetail,
+  AddFeedback,
+  EditFeedback,
+} from "../pages/index";
+import RootComponent from "@/components/RouteConfig/RootComponent";
+import ProtectedRoute from "@/components/RouteConfig/ProtectedRoute";
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
-    ...scrollRestoration(),
-  },
-  {
-    path: "/feedback",
+    element: <RootComponent />,
     children: [
-      { path: ":id", element: <FeedbackDetail /> },
-      { path: "add", element: <AddFeedback /> },
+      {
+        index: true,
+        element: <Home />,
+      },
+      {
+        path: "feedbacks",
+        children: [
+          {
+            path: ":id",
+            element: <FeedbackDetail />,
+          },
+          {
+            path: ":id/edit",
+            element: (
+              <ProtectedRoute>
+                <EditFeedback />
+              </ProtectedRoute>
+            ),
+          },
+          { path: "add", element: <AddFeedback /> },
+        ],
+      },
     ],
-    ...scrollRestoration(),
   },
 ]);

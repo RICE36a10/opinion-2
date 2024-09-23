@@ -31,7 +31,7 @@ export const deleteComment = async (feedbackId: string, commentId: string) => {
   const commentDoc = doc(feedbackRef, "comments", commentId);
   try {
     await deleteDoc(commentDoc);
-    return "Feedback deleted";
+    return "Comment is deleted";
   } catch (error) {
     console.error(error);
   }

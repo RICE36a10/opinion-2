@@ -15,16 +15,25 @@ import {
   REGISTER,
   REHYDRATE,
 } from "redux-persist/es/constants";
-const persistConfig = {
-  key: "root",
+const userPersistConfig = {
+  key: "user",
   storage,
 };
-const persistedUser = persistReducer(persistConfig, userReducer);
+
+const feedbackPersistConfig = {
+  key: "feedback",
+  storage,
+};
+const persistedUser = persistReducer(userPersistConfig, userReducer);
+const persistedFeedback = persistReducer(
+  feedbackPersistConfig,
+  feedbackReducer
+);
 export const store = configureStore({
   reducer: {
     User: persistedUser,
     Filter: filterReducer,
-    Feedback: feedbackReducer,
+    Feedback: persistedFeedback,
     Modal: modalReducer,
     Comment: commentReducer,
   },
