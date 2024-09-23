@@ -16,7 +16,11 @@ import { Link } from "react-router-dom";
 import { ErrorMessage } from "./PostReply";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
-import { addFeedback, deleteFeedback } from "@/services/feedback";
+import {
+  addFeedback,
+  deleteFeedback,
+  updateFeedback,
+} from "@/services/feedback";
 import { SingleRequest } from "@/types/request";
 import DeleteConfirmationModal from "./UI/Modals/DeleteModal";
 export interface FormData {
@@ -103,8 +107,13 @@ const FeedbackForm: React.FC<{
     setErrors(newErrors);
 
     if (!Object.values(newErrors).some((error) => error)) {
-      addFeedback(formData);
-      navigate("/");
+      if (edit && feedback) {
+        updateFeedback(feedback.id, formData);
+        navigate(`${path}`);
+      } else {
+        addFeedback(formData);
+        navigate("/");
+      }
     }
   };
   const onDelete = () => {

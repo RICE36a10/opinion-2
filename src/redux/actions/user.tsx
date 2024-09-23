@@ -25,7 +25,6 @@ export const listenToAuthState = createAsyncThunk(
     return new Promise<authUser | null>((resolve) => {
       onAuthStateChanged(auth, (user) => {
         if (user) {
-          console.log(user.providerData[0]);
           dispatch(setUser(user.providerData[0]));
         } else {
           dispatch(setUser(null));

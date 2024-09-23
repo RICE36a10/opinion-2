@@ -24,7 +24,7 @@ const SidebarWrapper = styled.aside<WrapperProps>`
     height: calc(100vh - 71px);
     align-items: flex-end;
     padding: 24px;
-    transform: ${({ isOpen }) => !isOpen && `translateX(100%)`};
+    transform: ${({ $isOpen }) => !$isOpen && `translateX(100%)`};
     transition: transform 0.4s ease-in-out;
     position: fixed;
     top: 71px;
@@ -37,7 +37,7 @@ interface SidebarProps {
   isOpen: boolean;
 }
 interface WrapperProps {
-  isOpen: boolean;
+  $isOpen: boolean;
 }
 const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
   ({ isMobile, isOpen }, ref) => {
@@ -45,7 +45,7 @@ const Sidebar = forwardRef<HTMLDivElement, SidebarProps>(
       return state.User;
     });
     return (
-      <SidebarWrapper ref={ref} isOpen={isOpen}>
+      <SidebarWrapper ref={ref} $isOpen={isOpen}>
         {isMobile && !user && <LogIn isMenu />}
         {!isMobile && <Board />}
         <CategoryFilter />

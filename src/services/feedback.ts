@@ -13,6 +13,7 @@ import {
   Timestamp,
   addDoc,
   deleteDoc,
+  updateDoc,
 } from "firebase/firestore";
 import { Comment, SingleRequest } from "@/types/request";
 import { FormData } from "@/components/FeedbackForm";
@@ -99,6 +100,28 @@ export const deleteFeedback = async (feedbackId: string) => {
   try {
     await deleteDoc(feedbackRef);
     return "Feedback is deleted";
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const updateFeedback = async (
+  feedbackId: string,
+  feedbackData: FormData
+) => {
+  const feedbackRef = doc(db, "Feedbacks", feedbackId);
+  try {
+    const { category, status } = feedbackData;
+    const updatedData = {
+      ...feedbackData,
+      category: category.name.toLowerCase(),
+      status: status.name.toLowerCase(),
+    };
+    await updateDoc(feedbackRef, updatedData);
+    return {
+      id: feedbackId,
+      ...updatedData,
+    };
   } catch (error) {
     console.error(error);
   }

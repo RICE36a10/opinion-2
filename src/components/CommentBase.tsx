@@ -50,7 +50,6 @@ export const CommentBase: React.FC<CommentBaseProps> = ({
           }
           return comment;
         });
-        console.log(updatedComments);
         dispatch(setComments(updatedComments));
       },
     }

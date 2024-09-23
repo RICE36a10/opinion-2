@@ -41,7 +41,6 @@ const FeedbackContainer = () => {
     if (sortedFeedbacks?.length === 0) {
       return <NotFound />;
     }
-    console.log(sortedFeedbacks);
     return sortedFeedbacks?.map((feedback: Request) => (
       <Feedback key={feedback.id} feedback={feedback} />
     ));
