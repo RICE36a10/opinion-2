@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { countByStatus } from "@/utils/helper";
 import { Status, StatusColor } from "@/types/request";
+import { Link } from "react-router-dom";
 const Roadmap = () => {
   const { feedbackData } = useSelector((state: RootState) => state.Feedback);
   const plannedCount = countByStatus(Status.Planned, feedbackData);
@@ -17,7 +18,7 @@ const Roadmap = () => {
     <RoadmapWrapper>
       <StatusHeader>
         <h3>Roadmap</h3>
-        <a href="/roadmap">View</a>
+        <Link to="/roadmap">View</Link>
       </StatusHeader>
       <StatusBody>
         {statuses.map((status) => (

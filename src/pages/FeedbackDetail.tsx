@@ -32,7 +32,6 @@ const FeedbackDetail = () => {
     }
   );
   const isAuthor = !user ? false : user.uid === feedback?.authorId;
-  console.log(user);
   if (isFeedbackLoading) {
     return (
       <Loading>

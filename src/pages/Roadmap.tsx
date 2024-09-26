@@ -1,4 +1,3 @@
-import React from "react";
 import RoadmapHeader from "@/components/RoadmapHeader";
 import styled from "styled-components";
 import StatusTable from "@/components/StatusTable";

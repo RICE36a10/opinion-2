@@ -11,12 +11,18 @@
   ],
 
   "compilerOptions": {
-    "noEmit": true,
+    "outDir": "./dist",
+    "rootDir": ".",
+    "noEmit": false,
+    "declaration": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "jsx": "react",
     "baseUrl": ".",
+
     "paths": {
       "@/*": ["./src/*"]
-    },
-    "declaration": true
+    }
   },
   "include": ["src"]
 }

@@ -1,5 +1,8 @@
 {
+  "extends": "./tsconfig.json",
+
   "compilerOptions": {
+    "outDir": "./dist",
     "composite": true,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2020",
@@ -30,5 +33,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
 }
