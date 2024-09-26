@@ -62,7 +62,8 @@ export const CommentBase: React.FC<CommentBaseProps> = ({
     }
   };
 
-  const isAuth = user.uid === AuthUser?.uid;
+  const isAuth = !AuthUser ? false : user.uid === AuthUser?.uid;
+
   const Content = (
     <>
       <UserContent>

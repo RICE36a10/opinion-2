@@ -1,7 +1,7 @@
 import useAsync from "@/utils/hooks/useAsync";
 import Feedback from "@/components/Feedback";
 import { getFeedbackById } from "@/services/feedback";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import Breadcrumb from "@/components/UI/Breadcrumb";
 import EditButton from "@/components/UI/EditButton";
@@ -10,10 +10,11 @@ import { RootState, AppDispatch } from "@/redux/store";
 import Comments from "@/components/Comments";
 import AddComment from "@/components/AddComment";
 import loadingImg from "@/assets/loading-gear.svg";
-// import { Comment } from "@/types/request";
 import { setComments } from "@/redux/slices/commentSlice";
+
 const FeedbackDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const url = useLocation().state?.path;
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => {
     return state.User;
@@ -30,7 +31,8 @@ const FeedbackDetail = () => {
       },
     }
   );
-  const isAuthor = user?.uid === feedback?.authorId;
+  const isAuthor = !user ? false : user.uid === feedback?.authorId;
+  console.log(user);
   if (isFeedbackLoading) {
     return (
       <Loading>
@@ -42,7 +44,7 @@ const FeedbackDetail = () => {
     feedback && (
       <DetailContainer>
         <DetailHeader>
-          <Breadcrumb />
+          <Breadcrumb url={url} />
           {isAuthor && <EditButton feedback={feedback} />}
         </DetailHeader>
         <Feedback feedback={feedback} isSingle />
@@ -70,6 +72,7 @@ const DetailContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
+  box-sizing: content-box;
   @media (max-width: 1024px) {
     padding: 56px 24px 120px;
   }

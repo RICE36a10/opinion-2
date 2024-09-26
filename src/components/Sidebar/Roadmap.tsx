@@ -2,22 +2,22 @@ import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { countByStatus } from "@/utils/helper";
-import { Status } from "@/types/request";
+import { Status, StatusColor } from "@/types/request";
 const Roadmap = () => {
   const { feedbackData } = useSelector((state: RootState) => state.Feedback);
   const plannedCount = countByStatus(Status.Planned, feedbackData);
   const progressCount = countByStatus(Status.Progress, feedbackData);
   const liveCount = countByStatus(Status.Live, feedbackData);
   const statuses = [
-    { label: "Planned", count: plannedCount, color: "#f49f85" },
-    { label: "In-Progress", count: progressCount, color: "#ad1fea" },
-    { label: "Live", count: liveCount, color: "#62bcfa" },
+    { label: "Planned", count: plannedCount, color: StatusColor.Planned },
+    { label: "In-Progress", count: progressCount, color: StatusColor.Progress },
+    { label: "Live", count: liveCount, color: StatusColor.Live },
   ];
   return (
     <RoadmapWrapper>
       <StatusHeader>
         <h3>Roadmap</h3>
-        <a href="">View</a>
+        <a href="/roadmap">View</a>
       </StatusHeader>
       <StatusBody>
         {statuses.map((status) => (

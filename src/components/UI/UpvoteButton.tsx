@@ -9,7 +9,8 @@ const UpvoteButton: React.FC<{
   vote: number;
   id: string;
   upvotedBy: string[];
-}> = ({ vote, id, upvotedBy }) => {
+  status?: string;
+}> = ({ vote, id, upvotedBy, status }) => {
   const { user } = useSelector((state: RootState) => {
     return state.User;
   });
@@ -56,7 +57,12 @@ const UpvoteButton: React.FC<{
   return (
     <>
       {" "}
-      <Button title="Vote" onClick={toggleClick} $upvote={upvote}>
+      <Button
+        $status={status}
+        title="Vote"
+        onClick={toggleClick}
+        $upvote={upvote}
+      >
         <svg width="10" height="7" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M1 6l4-4 4 4"
@@ -71,7 +77,7 @@ const UpvoteButton: React.FC<{
     </>
   );
 };
-const Button = styled.button<{ $upvote: boolean }>`
+const Button = styled.button<{ $upvote: boolean; $status: string | undefined }>`
   background: ${({ $upvote }) => ($upvote ? `var(--link-color)` : `#f2f4f7`)};
   display: flex;
   flex-direction: column;
@@ -105,5 +111,18 @@ const Button = styled.button<{ $upvote: boolean }>`
       `background: var(--hover-color);
 `}
   }
+  ${({ $status }) => {
+    if ($status) {
+      return `
+      flex-direction: row;
+    height: 40px;
+    min-width: 70px;
+    gap: 10px;
+    @media(max-width:1024px){
+    height:32px;
+    }
+    `;
+    }
+  }}
 `;
 export default UpvoteButton;

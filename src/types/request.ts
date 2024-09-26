@@ -58,3 +58,8 @@ export const enum Status {
   Live = "live",
   Suggestion = "suggestion",
 }
+export const enum StatusColor {
+  Planned = "#f49f85",
+  Progress = "#ad1fea",
+  Live = "#62bcfa",
+}

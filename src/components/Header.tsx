@@ -63,8 +63,7 @@ const Header: React.FC<{
         <span className="count">{suggestionCount}</span> Suggestions
       </Suggestion>
       <SortFeedbacks />
-      {user && <AddButton />}
-      {!user && <LogIn />}
+      {user ? <AddButton /> : <LogIn />}
       {user && !isMobile && <LogOut />}
     </StyledHeader>
   );

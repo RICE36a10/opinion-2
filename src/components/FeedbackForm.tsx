@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Breadcrumb from "./UI/Breadcrumb";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -7,19 +7,22 @@ import editLogo from "@/assets/shared/icon-edit-feedback.svg";
 import { Input } from "@/styles/Input";
 import ArrowUp from "@/assets/shared/icon-arrow-up.svg";
 import ArrowDown from "@/assets/shared/icon-arrow-down.svg";
+import loadingImg from "@/assets/loading-gear.svg";
 import Dropdown from "./UI/Dropdown";
 import { CommonInputStyle } from "@/styles/CommonInput";
 import { categoryOptions, statusOptions } from "@/utils/constants/Options";
 import { Textbox } from "@/styles/Textbox";
 import { CommonButton, DeleteBtn, CancelBtn } from "@/styles/CommonButton";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { ErrorMessage } from "./PostReply";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import useAsync from "@/utils/hooks/useAsync";
 import {
   addFeedback,
   deleteFeedback,
   updateFeedback,
+  getFeedbackById,
 } from "@/services/feedback";
 import { SingleRequest } from "@/types/request";
 import DeleteConfirmationModal from "./UI/Modals/DeleteModal";
@@ -41,32 +44,63 @@ const FeedbackForm: React.FC<{
 }> = ({ edit, path, feedback }) => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [feedbackData, setFeedbackData] = useState(feedback);
   const { user } = useSelector((state: RootState) => state.User);
   const urlVal = location.state?.from !== "/";
+  const { id } = useParams<{ id: string }>();
+  const { execute: executeGetFeedbackById, loading: isFeedbackLoading } =
+    useAsync(
+      getFeedbackById as (...args: unknown[]) => Promise<SingleRequest>,
+      {
+        onSuccess: (response) => {
+          setFeedbackData(response as SingleRequest);
+        },
+      }
+    );
 
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isStatusOpen, setIsStatusOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const initialCategory = edit
-    ? (categoryOptions.find(
-        (option) => option.name.toLowerCase() === feedback!.category
-      ) as { name: string })
-    : categoryOptions[0];
+  const initialCategory =
+    edit && feedbackData
+      ? (categoryOptions.find(
+          (option) => option.name.toLowerCase() === feedbackData.category
+        ) as { name: string })
+      : categoryOptions[0];
 
-  const initialStatus = edit
-    ? (statusOptions.find(
-        (option) => option.name.toLowerCase() === feedback?.status
-      ) as { name: string })
-    : statusOptions[0];
+  const initialStatus =
+    edit && feedbackData
+      ? (statusOptions.find(
+          (option) => option.name.toLowerCase() === feedbackData.status
+        ) as { name: string })
+      : statusOptions[0];
 
   const [formData, setFormData] = useState<FormData>({
-    title: edit ? feedback!.title : "",
-    description: edit ? feedback!.description : "",
+    title: "",
+    description: "",
     category: initialCategory,
     authorId: user!.uid,
     status: initialStatus,
   });
+
+  useEffect(() => {
+    if (edit && !feedbackData && id) {
+      executeGetFeedbackById(id as string);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (feedbackData) {
+      setFormData((prev) => {
+        return {
+          ...prev,
+          title: feedbackData.title,
+          description: feedbackData.description,
+        };
+      });
+    }
+  }, [feedbackData]);
 
   const [errors, setErrors] = useState<FormErrors>({
     title: "",
@@ -107,9 +141,9 @@ const FeedbackForm: React.FC<{
     setErrors(newErrors);
 
     if (!Object.values(newErrors).some((error) => error)) {
-      if (edit && feedback) {
-        updateFeedback(feedback.id, formData);
-        navigate(`${path}`);
+      if (edit && feedbackData) {
+        updateFeedback(feedbackData.id, formData);
+        navigate(`${path ? path : "/"}`);
       } else {
         addFeedback(formData);
         navigate("/");
@@ -117,11 +151,20 @@ const FeedbackForm: React.FC<{
     }
   };
   const onDelete = () => {
-    if (feedback) {
-      deleteFeedback(feedback.id);
+    if (feedbackData) {
+      deleteFeedback(feedbackData.id);
       navigate("/");
     }
   };
+
+  if (isFeedbackLoading) {
+    return (
+      <Loading>
+        <img src={loadingImg} alt="Loading" />
+      </Loading>
+    );
+  }
+
   return (
     <>
       <FormWrapper>
@@ -135,7 +178,7 @@ const FeedbackForm: React.FC<{
             )}
           </AddLogo>
           <Title>
-            {edit ? `Editing ‘${feedback!.title}’` : "Create New Feedback"}
+            {edit ? `Editing ‘${feedbackData?.title}’` : "Create New Feedback"}
           </Title>
 
           <FormBody>
@@ -156,7 +199,7 @@ const FeedbackForm: React.FC<{
               <Label htmlFor="category">Category</Label>
               <Description>Choose a category for your feedback</Description>
               <SelectButton type="button" onClick={toggleDropdown("Category")}>
-                {formData.category.name}
+                {formData.category?.name}
                 {isCategoryOpen ? (
                   <img src={ArrowUp} alt="Arrow icon" />
                 ) : (
@@ -178,7 +221,7 @@ const FeedbackForm: React.FC<{
                 <Label htmlFor="status">Update Status</Label>
                 <Description>Change feedback state</Description>
                 <SelectButton type="button" onClick={toggleDropdown("Status")}>
-                  {formData.status.name}
+                  {formData.status?.name}
                   {isStatusOpen ? (
                     <img src={ArrowUp} alt="Arrow icon" />
                   ) : (
@@ -230,7 +273,11 @@ const FeedbackForm: React.FC<{
             )}
             <Link
               to={
-                edit ? `${window.location.origin}${path}` : location.state?.from
+                edit
+                  ? path
+                    ? `${window.location.origin}${path}`
+                    : "/"
+                  : location.state?.from
               }
             >
               <CancelBtn type="button">Cancel</CancelBtn>
@@ -250,6 +297,17 @@ const FeedbackForm: React.FC<{
     </>
   );
 };
+
+const Loading = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+`;
 
 const FormWrapper = styled.div`
   margin: 0 auto;

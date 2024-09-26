@@ -8,11 +8,14 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useEffect, useState } from "react";
 import { Categories } from "@/utils/constants/Categories";
-
+import { StatusColor, Status } from "@/types/request";
+import { useLocation } from "react-router-dom";
 const Feedback: React.FC<{
   feedback: Request | SingleRequest;
   isSingle?: boolean;
-}> = ({ feedback, isSingle }) => {
+  status?: string;
+}> = ({ feedback, isSingle, status }) => {
+  const location = useLocation().pathname;
   const { comments } = useSelector((state: RootState) => state.Comment);
   const { title, description, category, commentCount, upvotes, id, upvotedBy } =
     feedback;
@@ -21,14 +24,50 @@ const Feedback: React.FC<{
     (cat) => cat.toLowerCase() === category
   )[0];
 
+  const statusState = (() => {
+    switch (status) {
+      case Status.Progress:
+        return {
+          color: StatusColor.Progress,
+          label: "In Progress",
+        };
+      case Status.Planned:
+        return {
+          color: StatusColor.Planned,
+          label: "Planned",
+        };
+      case Status.Live:
+        return {
+          color: StatusColor.Live,
+          label: "Live",
+        };
+      default:
+        return {
+          color: "white",
+          label: "Suggestion",
+        };
+    }
+  })();
+
   useEffect(() => {
     setCommentC(comments.length);
   }, [comments]);
   const isComments = isSingle ? commentC : commentCount;
   const FeedbackContent = (
-    <FeedbackWrapper>
+    <FeedbackWrapper $status={status} $bColor={statusState.color}>
+      {status && (
+        <StatusItem key={status}>
+          <StatusDot color={statusState.color} />
+          {statusState.label}
+        </StatusItem>
+      )}
       <ContentWrapper>
-        <UpvoteButton vote={upvotes} id={id} upvotedBy={upvotedBy} />
+        <UpvoteButton
+          status={status}
+          vote={upvotes}
+          id={id}
+          upvotedBy={upvotedBy}
+        />
         <Content>
           <h3>{title}</h3>
           <p>{description}</p>
@@ -47,11 +86,16 @@ const Feedback: React.FC<{
   return isSingle ? (
     FeedbackContent
   ) : (
-    <Link to={`/feedbacks/${id}`}>{FeedbackContent}</Link>
+    <Link to={`/feedbacks/${id}`} state={{ path: location }}>
+      {FeedbackContent}
+    </Link>
   );
 };
 
-const FeedbackWrapper = styled.div`
+const FeedbackWrapper = styled.div<{
+  $status: string | undefined;
+  $bColor: string | undefined;
+}>`
   display: flex;
   gap: 40px;
   padding: 28px 32px;
@@ -66,6 +110,91 @@ const FeedbackWrapper = styled.div`
   &:hover h3 {
     color: var(--link-color);
   }
+  ${({ $status, $bColor }) => {
+    if ($status) {
+      return `border-radius: 5px;
+        border-top:6px solid ${$bColor};
+          padding: 24px 32px 32px;
+          flex-direction: column;
+          gap:unset;
+          position: relative;
+          @media(max-width:1024px){
+          padding: 20px 20px 24px;
+
+          }
+          @media(max-width:767.98px){
+          padding: 16px 24px 24px;
+          border-radius:var(--border-radius)
+
+          }
+          ${Comment}{
+            position: absolute;
+    right: 32px;
+    bottom: 32px;
+    font-size: var(--body1-size);
+    line-height: var(--body1-line);
+    letter-spacing: -0.22px;
+    height:40px;
+    @media(max-width:1024px){
+    height:32px;
+    bottom:24px;
+    right: 20px;
+     font-size: var(--body3-size);
+     line-height: var(--body3-line);
+     letter-spacing: -0.18px;
+
+    }
+     @media(max-width:767.98px){
+     right:24px
+     }
+          }
+          ${ContentWrapper}{
+           flex-direction: column-reverse;
+           gap: 16px;
+           ${Content} p{
+           margin-bottom:16px !important;
+           @media(max-width:1024px){
+            font-size: var(--body3-size);
+            line-height: var(--body3-line);
+            margin-bottom:24px !important;
+           }
+           }
+            ${Content} h3{
+            @media(max-width:1024px){
+            font-size: var(--body3-size);
+            line-height: var(--body3-line);
+            letter-spacing: -0.18px;
+            margin-bottom:9px;
+            }
+            }
+    
+          }
+
+        
+        `;
+    }
+  }}
+`;
+const StatusItem = styled.div`
+  display: flex;
+  align-items: center;
+  color: var(--text-secondary);
+  font-size: var(--body1-size);
+  line-height: var(--body1-line);
+  font-weight: 400;
+  margin-bottom: 8px;
+  @media (max-width: 1024px) {
+    font-size: var(--body3-size);
+    line-height: var(--body3-line);
+    margin-bottom: 14px;
+  }
+`;
+const StatusDot = styled.span`
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 16px;
+  background-color: ${({ color }) => color};
 `;
 const Content = styled.div`
   h3 {

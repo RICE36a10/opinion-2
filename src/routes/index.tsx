@@ -4,6 +4,7 @@ import {
   FeedbackDetail,
   AddFeedback,
   EditFeedback,
+  Roadmap,
 } from "../pages/index";
 import RootComponent from "@/components/RouteConfig/RootComponent";
 import ProtectedRoute from "@/components/RouteConfig/ProtectedRoute";
@@ -26,13 +27,24 @@ export const router = createBrowserRouter([
           {
             path: ":id/edit",
             element: (
-              <ProtectedRoute>
+              <ProtectedRoute edit>
                 <EditFeedback />
               </ProtectedRoute>
             ),
           },
-          { path: "add", element: <AddFeedback /> },
+          {
+            path: "add",
+            element: (
+              <ProtectedRoute>
+                <AddFeedback />
+              </ProtectedRoute>
+            ),
+          },
         ],
+      },
+      {
+        path: "roadmap",
+        element: <Roadmap />,
       },
     ],
   },

@@ -58,7 +58,6 @@ export const getFeedbackById = async (feedbackId: string) => {
   const commentsRef = collection(feedbackRef, "comments");
   const commentsQuery = query(commentsRef, orderBy("createdAt", "asc"));
   const commentsSnapshot = await getDocs(commentsQuery);
-
   const comments: Comment[] = [];
   commentsSnapshot.forEach((doc) => {
     comments.push({
