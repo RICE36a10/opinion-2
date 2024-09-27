@@ -154,15 +154,15 @@ const FeedbackWrapper = styled.div<{
            ${Content} p{
            margin-bottom:16px !important;
            @media(max-width:1024px){
-            font-size: var(--body3-size);
-            line-height: var(--body3-line);
+            font-size: var(--body2-size);
+            line-height: var(--body2-line);
             margin-bottom:24px !important;
            }
            }
             ${Content} h3{
             @media(max-width:1024px){
-            font-size: var(--body3-size);
-            line-height: var(--body3-line);
+            font-size: var(--body1-size);
+            line-height: var(--body1-line);
             letter-spacing: -0.18px;
             margin-bottom:9px;
             }
@@ -209,10 +209,9 @@ const Content = styled.div`
       color: var(--link-color);
     }
     @media (max-width: 767.98px) {
-      font-size: var(--body3-size);
-      line-height: var(--body3-line);
+      font-size: var(--body1-size);
+      line-height: var(--body1-line);
       letter-spacing: -0.18px;
-      margin-bottom: 8px;
     }
   }
   p {
@@ -222,9 +221,8 @@ const Content = styled.div`
     font-weight: 400;
     margin-bottom: 12px;
     @media (max-width: 767.98px) {
-      font-size: var(--body3-size);
-      line-height: var(--body3-line);
-      margin-bottom: 8px;
+      font-size: var(--body2-size);
+      line-height: var(--body2-line);
     }
   }
   span {

@@ -9,9 +9,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/redux/store";
 import Comments from "@/components/Comments";
 import AddComment from "@/components/AddComment";
-import loadingImg from "@/assets/loading-gear.svg";
 import { setComments } from "@/redux/slices/commentSlice";
-
+import Loading from "@/components/UI/Loading";
 const FeedbackDetail = () => {
   const { id } = useParams<{ id: string }>();
   const url = useLocation().state?.path;
@@ -33,11 +32,7 @@ const FeedbackDetail = () => {
   );
   const isAuthor = !user ? false : user.uid === feedback?.authorId;
   if (isFeedbackLoading) {
-    return (
-      <Loading>
-        <img src={loadingImg} alt="Loading" />
-      </Loading>
-    );
+    return <Loading />;
   }
   return (
     feedback && (
@@ -53,25 +48,15 @@ const FeedbackDetail = () => {
     )
   );
 };
-const Loading = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-`;
+
 const DetailContainer = styled.div`
-  max-width: 730px;
+  max-width: 778px;
   width: 100%;
   margin: 0 auto;
   padding: 80px 24px 130px;
   display: flex;
   flex-direction: column;
   gap: 24px;
-  box-sizing: content-box;
   @media (max-width: 1024px) {
     padding: 56px 24px 120px;
   }

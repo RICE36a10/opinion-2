@@ -7,7 +7,6 @@ import editLogo from "@/assets/shared/icon-edit-feedback.svg";
 import { Input } from "@/styles/Input";
 import ArrowUp from "@/assets/shared/icon-arrow-up.svg";
 import ArrowDown from "@/assets/shared/icon-arrow-down.svg";
-import loadingImg from "@/assets/loading-gear.svg";
 import Dropdown from "./UI/Dropdown";
 import { CommonInputStyle } from "@/styles/CommonInput";
 import { categoryOptions, statusOptions } from "@/utils/constants/Options";
@@ -17,6 +16,7 @@ import { Link, useParams } from "react-router-dom";
 import { ErrorMessage } from "./PostReply";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import Loading from "./UI/Loading";
 import useAsync from "@/utils/hooks/useAsync";
 import {
   addFeedback,
@@ -158,11 +158,7 @@ const FeedbackForm: React.FC<{
   };
 
   if (isFeedbackLoading) {
-    return (
-      <Loading>
-        <img src={loadingImg} alt="Loading" />
-      </Loading>
-    );
+    return <Loading />;
   }
 
   return (
@@ -298,23 +294,11 @@ const FeedbackForm: React.FC<{
   );
 };
 
-const Loading = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-`;
-
 const FormWrapper = styled.div`
   margin: 0 auto;
   width: 100%;
   padding: 92px 24px 100px;
-  max-width: 540px;
-  box-sizing: content-box;
+  max-width: 588px;
   @media (max-width: 1024px) {
     padding-top: 60px;
   }

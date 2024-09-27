@@ -16,7 +16,7 @@ const StyledHeader = styled.header`
   padding: 14px 16px 14px 24px;
   min-height: 72px;
   @media (max-width: 767.98px) {
-    img {
+    .s-icon {
       display: none;
     }
     border-radius: 0;
@@ -58,7 +58,7 @@ const Header: React.FC<{
 
   return (
     <StyledHeader>
-      <img src={Icon} alt="Suggestion icon" />
+      <img className="s-icon" src={Icon} alt="Suggestion icon" />
       <Suggestion>
         <span className="count">{suggestionCount}</span> Suggestions
       </Suggestion>
