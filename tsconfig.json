@@ -11,8 +11,6 @@
   ],
 
   "compilerOptions": {
-    "outDir": "./dist",
-    "rootDir": "src",
     "noEmit": false,
     "declaration": true,
     "allowSyntheticDefaultImports": true,
@@ -24,5 +22,5 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"]
+  "include": ["src"]
 }
