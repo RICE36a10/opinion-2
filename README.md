@@ -6,6 +6,7 @@ This project is a solution to the [Product Feedback App challenge on Frontend Me
 
 Users can:
 
+- Log in using Firebase Authentication
 - Create, read, update, and delete product feedback requests
 - Receive form validations when trying to create/edit feedback requests
 - Sort suggestions by most/least upvotes and most/least comments
