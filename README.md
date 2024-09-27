@@ -24,7 +24,7 @@ Live Site URL: - [Product feedback app](https://product-feedback-app-sh.netlify.
 - React
 - TypeScript
 - Firebase
-- Styled Component
+- Styled Components
 
 ## Getting Started
 
