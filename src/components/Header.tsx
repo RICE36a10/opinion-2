@@ -42,13 +42,13 @@ const Header: React.FC<{
   const { user } = useSelector((state: RootState) => {
     return state.User;
   });
+
   const { feedbackData } = useSelector((state: RootState) => {
     return state.Feedback;
   });
   const { filterByCategory } = useSelector((state: RootState) => {
     return state.Filter;
   });
-
   const suggestionCount =
     feedbackData?.filter(
       (feedback) =>
