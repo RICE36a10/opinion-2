@@ -5,6 +5,8 @@ import Board from "@/components/Sidebar/Board";
 import { useState, useEffect, useRef, useCallback } from "react";
 import Overlay from "@/components/UI/Overlay";
 import Header from "@/components/Header";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
 
 const Home = () => {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -56,17 +58,23 @@ const Home = () => {
   // Handle Sort
 
   return (
-    <Container>
-      {isMobile && (
-        <Board isOpen={isOpen} setIsOpen={setIsOpen} ref={headerRef} />
-      )}
-      <Sidebar ref={sidebarRef} isMobile={isMobile} isOpen={isOpen} />
-      <ContentWrapper>
-        <Header isMobile={isMobile} />
-        <FeedbackContainer />
-      </ContentWrapper>
-      {isOpen && <Overlay />}
-    </Container>
+    <div>
+      <Container>
+        {isMobile && (
+            <Board isOpen={isOpen} setIsOpen={setIsOpen} ref={headerRef} />
+        )}
+        <Sidebar ref={sidebarRef} isMobile={isMobile} isOpen={isOpen} />
+        <ContentWrapper>
+          <Header isMobile={isMobile} />
+          <FeedbackContainer />
+        </ContentWrapper>
+        {isOpen && <Overlay />}
+      </Container>
+      <p style={{textAlign: 'center', color: 'white' }}>
+        Made With <FontAwesomeIcon icon={faHeart} style={{color:'red',}} /> By Yash
+      </p>
+
+    </div>
   );
 };
 
@@ -77,6 +85,7 @@ const Container = styled.div`
   padding: 50px 24px 100px;
   display: flex;
   gap: 30px;
+  //background-color: #ffa100;
   @media (max-width: 1024px) {
     flex-direction: column;
     gap: 40px;

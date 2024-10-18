@@ -63,6 +63,7 @@ const DropdownWrapper = styled.div<{ $isCategory: boolean }>`
   top: 62px;
   border-radius: var(--border-radius);
   background: var(--primary-color);
+  //background-color: #ffa100;
   box-shadow: var(--box-shadow);
   z-index: 99;
   width: 100%;
@@ -86,12 +87,15 @@ const Option = styled.button`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  
   &:hover {
-    color: var(--button-color);
+    color: #701274;
+    scale: 1.1;
   }
   &:not(:last-of-type) {
     border-bottom: 1px solid rgb(58, 67, 116, 0.15);
   }
+  
   @media (max-width: 767.98px) {
     font-size: var(--body2-size);
     line-height: var(--body2-line);

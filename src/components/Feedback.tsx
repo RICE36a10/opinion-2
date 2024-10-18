@@ -101,6 +101,10 @@ const FeedbackWrapper = styled.div<{
   padding: 28px 32px;
   border-radius: var(--border-radius);
   background: var(--primary-color);
+//background-color: #ffa100;
+//  background: #283048;  /* fallback for old browsers */
+//  background: -webkit-linear-gradient(to right,#283048, #859398);  /* Chrome 10-25, Safari 5.1-6 */
+//  background: linear-gradient(to right,#283048, #859398); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
   @media (max-width: 767.98px) {
     gap: unset;

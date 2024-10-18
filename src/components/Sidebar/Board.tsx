@@ -4,8 +4,10 @@ import burger from "@/assets/shared/mobile/icon-hamburger.svg";
 import close from "@/assets/shared/mobile/icon-close.svg";
 import React, { forwardRef } from "react";
 export const BoardCard = styled.div`
-  background: url(${bgHeader});
-  background-size: cover;
+  //background: url(${bgHeader});
+    background-color: #8BC6EC;
+    background-image: linear-gradient(135deg, #8BC6EC 0%, #222676 100%);
+    background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   padding: 62px 24px 24px;
@@ -20,7 +22,7 @@ export const BoardCard = styled.div`
   p {
     font-size: var(--body2-size);
     font-weight: 500;
-    opacity: 0.75;
+    opacity: 0.5;
   }
   @media (max-width: 1024px) {
     display: flex;

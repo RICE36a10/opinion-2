@@ -57,6 +57,7 @@ const DetailContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 24px;
+    
   @media (max-width: 1024px) {
     padding: 56px 24px 120px;
   }
