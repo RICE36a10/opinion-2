@@ -2,13 +2,13 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 const firebaseConfig = {
-  apiKey: "AIzaSyABNp4nr-iPTQRIj43oDZ0s6Jlg1ByNsog",
-  authDomain: "product-feedback-app-60541.firebaseapp.com",
-  projectId: "product-feedback-app-60541",
-  storageBucket: "product-feedback-app-60541.appspot.com",
-  messagingSenderId: "398811701439",
-  appId: "1:398811701439:web:324f4d80aa8d12bcf1e60a",
-  measurementId: "G-WZSGERBQC6",
+  apiKey: "AIzaSyAnZoU0S9VcQNqtlP0Eo-oFfYD9Q2jg1RE",
+  authDomain: "original-opinion-1.firebaseapp.com",
+  projectId: "original-opinion-1",
+  storageBucket: "original-opinion-1.appspot.com",
+  messagingSenderId: "439916396436",
+  appId: "1:439916396436:web:df16ede09e526540af5981",
+  measurementId: "G-N4PGR1V4GM"
 };
 
 // Initialize Firebase
