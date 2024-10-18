@@ -32,12 +32,15 @@ const FeedbackContainer = () => {
       );
     }
 
-    if (feedbackData) {
+    if (Array.isArray(feedbackData)) {
       const filteredData = feedbackData.filter(
-        (feedback) => feedback.status === "suggestion"
+          (feedback) => feedback.status === "suggestion"
       );
       sortedFeedbacks = sortFeedbacks(filteredData, sortBy.id, category);
+    } else {
+      console.error("feedbackData is not an array:", feedbackData);
     }
+
     if (sortedFeedbacks?.length === 0) {
       return <NotFound />;
     }

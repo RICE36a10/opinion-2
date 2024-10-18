@@ -9,7 +9,10 @@ const ProtectedRoute: React.FC<{
   const { id } = useParams();
   const { user } = useSelector((state: RootState) => state.User);
   const { feedbackData } = useSelector((state: RootState) => state.Feedback);
-  const feedback = feedbackData.find((f) => f.id === id);
+  const feedback = Array.isArray(feedbackData)
+      ? feedbackData.find((f) => f.id === id)
+      : null;  // or undefined, or handle the error as you need
+
   if (!user || (user && edit && feedback?.authorId !== user?.uid)) {
     return <Navigate to="/" replace />;
   }

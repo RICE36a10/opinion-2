@@ -49,14 +49,17 @@ const Header: React.FC<{
   const { filterByCategory } = useSelector((state: RootState) => {
     return state.Filter;
   });
-  const suggestionCount =
-    feedbackData?.filter(
-      (feedback) =>
-        feedback.status === Status.Suggestion &&
-        (filterByCategory === "all" || feedback.category === filterByCategory)
-    ).length ?? 0;
+    const suggestionCount =
+        Array.isArray(feedbackData)
+            ? feedbackData.filter(
+                (feedback) =>
+                    feedback.status === Status.Suggestion &&
+                    (filterByCategory === "all" || feedback.category === filterByCategory)
+            ).length
+            : 0;
 
-  return (
+
+    return (
     <StyledHeader>
       <img className="s-icon" src={Icon} alt="Suggestion icon" />
       <Suggestion>

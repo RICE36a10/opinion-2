@@ -35,14 +35,23 @@ const StatusTable = () => {
   const [activeTab, setActiveTab] = useState<Status>(Status.Planned);
   const { feedbackData } = useSelector((state: RootState) => state.Feedback);
 
+  // const feedbacksByStatus = useMemo(() => {
+  //   return tabs.reduce((acc, { status }) => {
+  //     acc[status] = feedbackData.filter(
+  //         (feedback) => feedback.status === status
+  //     ); // Store the filtered feedbacks as an array
+  //     return acc;
+  //   }, {} as Record<Status, Request[]>); // Initialize as an empty object with the correct type
+  // }, [feedbackData]);
   const feedbacksByStatus = useMemo(() => {
     return tabs.reduce((acc, { status }) => {
-      acc[status] = feedbackData.filter(
-        (feedback) => feedback.status === status
-      );
+      acc[status] = Array.isArray(feedbackData) ? feedbackData.filter(
+          (feedback) => feedback.status === status
+      ) : []; // If feedbackData is not an array, return an empty array
       return acc;
     }, {} as Record<Status, Request[]>);
   }, [feedbackData]);
+
 
   const renderFeedbacks = (feedbacks: Request[]) => {
     return (

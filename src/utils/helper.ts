@@ -6,9 +6,12 @@ export const sortFeedbacks = (
   category: string
 ) => {
   const filteredFeedbacks =
-    category === "all"
-      ? feedbacks
-      : feedbacks.filter((feedback) => feedback.category === category);
+      Array.isArray(feedbacks) && category === "all"
+          ? feedbacks
+          : Array.isArray(feedbacks)
+              ? feedbacks.filter((feedback) => feedback.category === category)
+              : [];
+
   switch (sortBy) {
     case sortByOrder.DESC_UPVOTES:
       return [...filteredFeedbacks].sort((a, b) => b.upvotes - a.upvotes);
@@ -29,18 +32,32 @@ export const sortFeedbacks = (
 export const editUserEmail = (email: string) => {
   return email.slice(0, email.indexOf("@"));
 };
+
+// export const countByStatus = (status: Status, feedbacks: Request[]) => {
+//   switch (status) {
+//     case Status.Planned:
+//       return feedbacks.filter((feedback) => feedback.status === Status.Planned)
+//         .length;
+//     case Status.Progress:
+//       return feedbacks.filter((feedback) => feedback.status === Status.Progress)
+//         .length;
+//     case Status.Live:
+//       return feedbacks.filter((feedback) => feedback.status === Status.Live)
+//         .length;
+//     default:
+//       return 0;
+//   }
+// };
 export const countByStatus = (status: Status, feedbacks: Request[]) => {
-  switch (status) {
-    case Status.Planned:
-      return feedbacks.filter((feedback) => feedback.status === Status.Planned)
-        .length;
-    case Status.Progress:
-      return feedbacks.filter((feedback) => feedback.status === Status.Progress)
-        .length;
-    case Status.Live:
-      return feedbacks.filter((feedback) => feedback.status === Status.Live)
-        .length;
-    default:
-      return 0;
-  }
+  // Check if feedbacks is an array
+  if (!Array.isArray(feedbacks)) return 0;
+
+  // Filter feedbacks based on the given status
+  const filteredFeedbacks = feedbacks.filter(
+      (feedback) => feedback.status === status
+  );
+
+  // Return the count of filtered feedbacks
+  return filteredFeedbacks.length;
 };
+
