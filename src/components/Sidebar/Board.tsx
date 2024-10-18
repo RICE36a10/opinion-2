@@ -72,8 +72,8 @@ const Board = forwardRef<HTMLDivElement, BoardProps>(
     };
     return (
       <BoardCard ref={ref}>
-        <h1>Frontend Mentor</h1>
-        <p>Feedback Board</p>
+        <h1>OpinionOasis</h1>
+        <p>Listings</p>
         <NavButton onClick={handleToggle}>
           {isOpen ? (
             <img src={close} alt="close" />
